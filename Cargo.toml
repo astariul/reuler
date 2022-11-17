@@ -1,9 +1,11 @@
 [package]
 name = "reuler"
-version = "0.1.0"
+version = "0.2.0"
+authors = ["Astariul <remondnicola@gmail.com>"]
 description = "Solutions to Project Euler in Rust"
 edition = "2021"
 license = "MIT"
+homepage = "https://www.github.com/astariul/reuler"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
