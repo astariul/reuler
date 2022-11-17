@@ -18,8 +18,8 @@
 //! reuler 1
 //! ```
 
-pub mod utils;
 pub mod problems;
+pub mod utils;
 
 /// Solve the given problem and return the solution as a string.
 ///
@@ -50,7 +50,10 @@ mod tests {
     #[test]
     fn test_invalid_id() {
         match solve(-1) {
-            Ok(_val) => assert!(false, "No error raised, even though the given ID was invalid."),
+            Ok(_val) => assert!(
+                false,
+                "No error raised, even though the given ID was invalid."
+            ),
             Err(e) => assert!(e.contains("not valid"), "Wrong error message"),
         }
     }
@@ -58,7 +61,10 @@ mod tests {
     #[test]
     fn test_not_implemented() {
         match solve(9999999) {
-            Ok(_val) => assert!(false, "No error raised, even though the given ID was invalid."),
+            Ok(_val) => assert!(
+                false,
+                "No error raised, even though the given ID was invalid."
+            ),
             Err(e) => assert!(e.contains("not yet implemented"), "Wrong error message"),
         }
     }

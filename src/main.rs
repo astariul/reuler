@@ -13,7 +13,10 @@ fn main() {
     }
 
     let problem_id: isize = args[1].trim().parse().unwrap_or_else(|_err| {
-        println!("The given argument is not an ID (`{}`). Please provide a number.", args[1]);
+        println!(
+            "The given argument is not an ID (`{}`). Please provide a number.",
+            args[1]
+        );
         process::exit(1);
     });
 
