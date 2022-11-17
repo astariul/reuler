@@ -1,6 +1,7 @@
 use reuler;
 use std::env;
 use std::process;
+use std::time;
 
 fn main() {
     // Inputs
@@ -16,12 +17,15 @@ fn main() {
         process::exit(1);
     });
 
-    // Solve the problem
+    // Solve the problem, timing the runtime
+    let now = time::Instant::now();
     let res = reuler::solve(problem_id).unwrap_or_else(|err| {
         println!("{err}");
         process::exit(1);
     });
+    let elapsed = now.elapsed();
 
     // Print the result
     println!("Solution for problem #{} : {}", problem_id, res);
+    println!("Time taken : {elapsed:?}");
 }
