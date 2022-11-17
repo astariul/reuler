@@ -7,7 +7,8 @@
 //! ```rust
 //! use reuler;
 //!
-//! println!(reuler::solve(1).unwrap());
+//! let res = reuler::solve(1).unwrap();
+//! println!("Solution : {res}");
 //! ```
 //!
 //! ## Example of commandline usage
