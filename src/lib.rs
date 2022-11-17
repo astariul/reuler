@@ -18,15 +18,20 @@
 //! reuler 1
 //! ```
 
+pub mod problems;
+
 /// Solve the given problem and return the solution as a string.
 ///
 /// # Errors
 /// If the given problem ID is invalid or doesn't have an implementation yet,
 /// an error is returned.
-pub fn solve(problem_id: isize) -> Result<&'static str, String> {
+pub fn solve(problem_id: isize) -> Result<String, String> {
     if problem_id < 1 {
         return Err(format!("The provided problem ID is not valid (0 or negative number : `{problem_id}`). Please provide a valid ID."));
     }
-    // "The solution for the problem #{} is not yet implemented. Consider contributing !", problem_id);
-    Ok("23")
+
+    match problem_id {
+        1 => return Ok(problems::prob_1::solve()),
+        _ => return Err(format!("The solution for the problem #{problem_id} is not yet implemented. Consider contributing !")),
+    }
 }

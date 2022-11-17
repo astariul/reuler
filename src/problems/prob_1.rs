@@ -1,12 +1,18 @@
 /// Compute the sum of natural numbers below the given limit that are multiple
 /// of 3 or 5.
-pub fn sum_multiple_3_and_5_under(limit: usize) -> usize {
-    23
+fn sum_multiple_3_and_5_under(limit: usize) -> usize {
+    let mut sum = 0;
+    for i in 1..limit {
+        if i % 3 == 0 || i % 5 == 0 {
+            sum += i;
+        }
+    }
+    sum
 }
 
 /// Solve the problem #1 and return the solution.
-pub fn solve() -> usize {
-    sum_multiple_3_and_5_under(1000)
+pub fn solve() -> String {
+    sum_multiple_3_and_5_under(1000).to_string()
 }
 
 #[cfg(test)]
