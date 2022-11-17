@@ -1,7 +1,7 @@
 [package]
-name = "rustere"
-version = "0.3.0-dev"
-description = "Rust template repository"
+name = "reuler"
+version = "0.1.0-dev"
+description = "Solutions to Project Euler in Rust"
 edition = "2021"
 license = "MIT"
 
