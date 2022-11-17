@@ -35,3 +35,29 @@ pub fn solve(problem_id: isize) -> Result<String, String> {
         _ => return Err(format!("The solution for the problem #{problem_id} is not yet implemented. Consider contributing !")),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_solve_problem_1() {
+        assert_eq!(solve(1).unwrap(), "233168");
+    }
+
+    #[test]
+    fn test_invalid_id() {
+        match solve(-1) {
+            Ok(_val) => assert!(false, "No error raised, even though the given ID was invalid."),
+            Err(e) => assert!(e.contains("not valid"), "Wrong error message"),
+        }
+    }
+
+    #[test]
+    fn test_not_implemented() {
+        match solve(9999999) {
+            Ok(_val) => assert!(false, "No error raised, even though the given ID was invalid."),
+            Err(e) => assert!(e.contains("not yet implemented"), "Wrong error message"),
+        }
+    }
+}
