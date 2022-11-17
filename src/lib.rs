@@ -1,46 +1,31 @@
-//! `rustere` stands for Rust Template Repository. It's a Github template
-//! repository, which is easy to duplicate and useful to get started, with a
-//! fully featured repository.
-//! Check it out there : [astariul/rustere](https://github.com/astariul/rustere)
+//! `reuler` provide Rust implementation for the
+//! [Project Euler](https://projecteuler.net/).
 //!
-//! This crate doesn't contain any useful code, just some dummy code for the
-//! sake of the crate.
+//! ## Example of library usage
+//! You can call the `solve()` function to run any of the implemented solution.
+//!
+//! ```rust
+//! use reuler;
+//!
+//! println!(reuler::solve(1).unwrap());
+//! ```
+//!
+//! ## Example of commandline usage
+//! You can also call the command line `reuler` directly to get the result.
+//!
+//! ```console
+//! reuler 1
+//! ```
 
-/// Checks if a number is odd or not. Returns `True` if the number is odd (1,
-/// 3, 5, ...) and `False` if the number is even (0, 2, 4, ...).
+/// Solve the given problem and return the solution as a string.
 ///
-/// # Examples
-/// ```
-/// assert!(rustere::is_odd(79));
-/// ```
-///
-/// ```
-/// assert!(!rustere::is_odd(88));
-/// ```
-///
-/// # Notes
-/// This is just a dummy function, to have _some_ code inside this template
-/// repository. Nothing else.
-pub fn is_odd(x: usize) -> bool {
-    x % 2 == 1
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_odd() {
-        assert!(is_odd(1));
+/// # Errors
+/// If the given problem ID is invalid or doesn't have an implementation yet,
+/// an error is returned.
+pub fn solve(problem_id: isize) -> Result<&'static str, String> {
+    if problem_id < 1 {
+        return Err(format!("The provided problem ID is not valid (0 or negative number : `{problem_id}`). Please provide a valid ID."));
     }
-
-    #[test]
-    fn test_even() {
-        assert!(!is_odd(2));
-    }
-
-    #[test]
-    fn test_zero() {
-        assert!(!is_odd(0));
-    }
+    // "The solution for the problem #{} is not yet implemented. Consider contributing !", problem_id);
+    Ok("23")
 }

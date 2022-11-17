@@ -1,27 +1,27 @@
-use rustere::is_odd;
-use std::io;
+use reuler;
+use std::env;
+use std::process;
 
 fn main() {
-    let guess_nb: usize;
+    // Inputs
+    let args: Vec<String> = env::args().collect();
 
-    loop {
-        println!("Enter a number to know if odd.");
-
-        let mut guess = String::new();
-
-        io::stdin()
-            .read_line(&mut guess)
-            .expect("Failed to read line");
-
-        guess_nb = match guess.trim().parse() {
-            Ok(num) => num,
-            Err(_) => continue,
-        };
-        break;
+    if args.len() < 2 {
+        println!("Not enough arguments. Usage : `reuler <problem_id>`");
+        process::exit(1);
     }
 
-    match is_odd(guess_nb) {
-        true => println!("{guess_nb} is odd."),
-        false => println!("{guess_nb} is even."),
-    }
+    let problem_id: isize = args[1].trim().parse().unwrap_or_else(|_err| {
+        println!("The given argument is not an ID (`{}`). Please provide a number.", args[1]);
+        process::exit(1);
+    });
+
+    // Solve the problem
+    let res = reuler::solve(problem_id).unwrap_or_else(|err| {
+        println!("{err}");
+        process::exit(1);
+    });
+
+    // Print the result
+    println!("Solution for problem #{} : {}", problem_id, res);
 }
