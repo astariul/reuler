@@ -1,6 +1,6 @@
 [package]
 name = "reuler"
-version = "0.2.0"
+version = "0.3.0-dev"
 authors = ["Astariul <remondnicola@gmail.com>"]
 description = "Solutions to Project Euler in Rust"
 edition = "2021"
