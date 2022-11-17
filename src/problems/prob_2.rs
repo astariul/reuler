@@ -2,7 +2,7 @@ use crate::utils;
 
 /// Compute the sum of even values of the Fibonacci sequence below the given
 /// limit.
-fn even_fibo_under(limit: usize) -> usize {
+fn sum_even_fibo_under(limit: usize) -> usize {
     let mut fibo = utils::Fibonacci { curr: 1, next: 2 };
     let mut sum = 0;
 
@@ -22,7 +22,7 @@ fn even_fibo_under(limit: usize) -> usize {
 
 /// Solve the problem #2 and return the solution.
 pub fn solve() -> String {
-    even_fibo_under(4000000).to_string()
+    sum_even_fibo_under(4000000).to_string()
 }
 
 #[cfg(test)]
@@ -31,6 +31,6 @@ mod tests {
 
     #[test]
     fn test_example() {
-        assert_eq!(even_fibo_under(100), 44);
+        assert_eq!(sum_even_fibo_under(100), 44);
     }
 }
