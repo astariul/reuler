@@ -2,7 +2,7 @@
 fn largest_prime_factor(x: usize) -> usize {
     let mut n = x;
     let mut f = 2;
-    
+
     while f * f <= n {
         if n % f == 0 {
             n /= f;
