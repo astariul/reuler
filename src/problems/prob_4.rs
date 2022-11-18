@@ -29,7 +29,7 @@ fn is_palindromic(x: usize) -> bool {
     } else {
         s2 = &x_str[mid + 1..len];
     }
-    
+
     // Reverse the second string, and compare them
     let s2 = s2.chars().rev().collect::<String>();
     s1 == s2
