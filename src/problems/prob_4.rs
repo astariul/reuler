@@ -35,7 +35,7 @@ fn is_palindromic(x: usize) -> bool {
     s1 == s2
 }
 
-/// Solve the problem #2 and return the solution.
+/// Solve the problem #4 and return the solution.
 pub fn solve() -> String {
     largest_palindrome_product(3).to_string()
 }
