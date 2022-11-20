@@ -1,6 +1,5 @@
 use crate::utils;
 
-
 /// Compute the n-th prime number.
 fn nth_prime(n: usize) -> usize {
     let mut primes = utils::Primes::new();

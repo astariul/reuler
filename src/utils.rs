@@ -18,7 +18,6 @@ impl Iterator for Fibonacci {
     }
 }
 
-
 pub struct Primes {
     p: usize,
     previous_primes: Vec<usize>,
@@ -45,7 +44,7 @@ impl Iterator for Primes {
             self.p += 1;
         } else {
             loop {
-                self.p += 2;    // Skip even numbers
+                self.p += 2; // Skip even numbers
 
                 // Check if the number is divisible by any previous prime
                 let mut divisible = false;
