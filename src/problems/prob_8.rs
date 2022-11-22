@@ -1,4 +1,4 @@
-/// Compute the greatest product of the n adjacent digits in the 
+/// Compute the greatest product of the n adjacent digits in the
 /// problem-specific 1000-digit number.
 fn greatest_product_adjacent(n: usize) -> u64 {
     // Some preprocessing
