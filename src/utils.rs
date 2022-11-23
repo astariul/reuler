@@ -83,7 +83,7 @@ impl Iterator for Primes {
                 }
 
                 // When we have a limit, we don't need to store past primes that
-                // are over sqrt(lim). It will be faster                
+                // are over the square root of the limit, it will be faster
                 if self.p as f64 <= (lim as f64).sqrt() {
                     self.previous_primes.push(self.p);
                 }
