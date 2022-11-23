@@ -21,13 +21,27 @@ impl Iterator for Fibonacci {
 pub struct Primes {
     p: usize,
     previous_primes: Vec<usize>,
+    limit: Option<usize>,
 }
 
 impl Primes {
+    /// Create a new iterator, producing indefinitely prime numbers.
+    /// Note that if you already know the upper limit of prime number you want,
+    /// you can use `new_up_to(x)`, it will be faster.
     pub fn new() -> Self {
         Self {
             p: 1,
-            previous_primes: vec![2],
+            previous_primes: Vec::new(),
+            limit: None,
+        }
+    }
+
+    /// Create a new iterator, producing prime numbers up to a limit.
+    pub fn new_up_to(x: usize) -> Self {
+        Self {
+            p: 1,
+            previous_primes: Vec::new(),
+            limit: Some(x),
         }
     }
 }
@@ -48,7 +62,7 @@ impl Iterator for Primes {
 
                 // Check if the number is divisible by any previous prime
                 let mut divisible = false;
-                for pp in &self.previous_primes {
+                for pp in self.previous_primes.iter().rev() {
                     if self.p % pp == 0 {
                         divisible = true;
                         break;
@@ -62,7 +76,24 @@ impl Iterator for Primes {
             }
         }
 
-        self.previous_primes.push(self.p);
-        Some(self.p)
+        match self.limit {
+            Some(lim) => {
+                if self.p > lim {
+                    return None;
+                }
+
+                // When we have a limit, we don't need to store past primes that
+                // are over the square root of the limit, it will be faster
+                if self.p as f64 <= (lim as f64).sqrt() {
+                    self.previous_primes.push(self.p);
+                }
+                Some(self.p)
+            }
+            None => {
+                // When we don't have limit, store every past primes for the next step
+                self.previous_primes.push(self.p);
+                Some(self.p)
+            }
+        }
     }
 }
