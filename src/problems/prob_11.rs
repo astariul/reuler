@@ -34,7 +34,6 @@ impl Grid {
     }
 }
 
-
 /// Compute the largest product of n digits from the given grid, where we
 /// consider n adjacent numbers (horizontally, vertically, diagonally)
 fn largest_product_in(grid: Grid, n: usize) -> usize {
