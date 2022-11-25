@@ -5,7 +5,7 @@ use std::collections::HashSet;
 /// # Examples
 /// ```
 /// let mut fibo = reuler::utils::Fibonacci { curr: 1, next: 2 };
-/// 
+///
 /// assert_eq!(fibo.next().unwrap(), 1);
 /// assert_eq!(fibo.next().unwrap(), 2);
 /// assert_eq!(fibo.next().unwrap(), 3);
@@ -50,7 +50,7 @@ impl Iterator for Fibonacci {
 /// Use `new()` for indefinitely iterating the prime numbers.
 /// ```
 /// let mut primes = reuler::utils::Primes::new();
-/// 
+///
 /// assert_eq!(primes.next().unwrap(), 2);
 /// assert_eq!(primes.next().unwrap(), 3);
 /// assert_eq!(primes.next().unwrap(), 5);
