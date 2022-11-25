@@ -11,12 +11,16 @@
 //! println!("Solution : {res}");
 //! ```
 //!
-//! ## Example of commandline usage
+//! ## Example of command line usage
 //! You can also call the command line `reuler` directly to get the result.
 //!
 //! ```console
 //! reuler 1
 //! ```
+//!
+//! Will print :
+//! > Solution for problem #1 : 233168  
+//! > Time taken : 83.208µs
 
 pub mod problems;
 pub mod utils;

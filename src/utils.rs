@@ -1,6 +1,29 @@
 use std::collections::HashSet;
 
 /// Iteratively compute the Fibonacci sequence.
+///
+/// # Examples
+/// ```
+/// let mut fibo = reuler::utils::Fibonacci { curr: 1, next: 2 };
+///
+/// assert_eq!(fibo.next().unwrap(), 1);
+/// assert_eq!(fibo.next().unwrap(), 2);
+/// assert_eq!(fibo.next().unwrap(), 3);
+/// assert_eq!(fibo.next().unwrap(), 5);
+/// assert_eq!(fibo.next().unwrap(), 8);
+/// ```
+///
+/// Or you can use it in a loop (will never end) :
+/// ```
+/// let mut fibo = reuler::utils::Fibonacci { curr: 1, next: 2 };
+///
+/// for f in fibo {
+///     // Do something with f, the current fibonacci number
+///     
+///     // Then at some point, break out of the loop
+///     break;
+/// }
+/// ```
 pub struct Fibonacci {
     pub curr: usize,
     pub next: usize,
@@ -22,6 +45,30 @@ impl Iterator for Fibonacci {
 }
 
 /// Iteratively compute the primes numbers.
+///
+/// # Examples
+/// Use `new()` for indefinitely iterating the prime numbers.
+/// ```
+/// let mut primes = reuler::utils::Primes::new();
+///
+/// assert_eq!(primes.next().unwrap(), 2);
+/// assert_eq!(primes.next().unwrap(), 3);
+/// assert_eq!(primes.next().unwrap(), 5);
+/// assert_eq!(primes.next().unwrap(), 7);
+/// assert_eq!(primes.next().unwrap(), 11);
+/// ```
+///
+/// Or you can use `new_up_to()` for all the primes up until the given limit (
+/// giving a limit will results in faster computations) :
+/// ```
+/// let mut primes = reuler::utils::Primes::new_up_to(20);
+///
+/// let mut last_p = 0;
+/// for p in primes {
+///     last_p = p;
+/// }
+/// assert_eq!(last_p, 19);
+/// ```
 pub struct Primes {
     p: usize,
     previous_primes: Vec<usize>,
@@ -103,6 +150,17 @@ impl Iterator for Primes {
 }
 
 /// Compute the list of divisors for the given number.
+///
+/// # Examples
+/// ```
+/// let divisors = reuler::utils::get_divisors(8);
+///
+/// assert_eq!(divisors.len(), 4);
+/// assert!(divisors.contains(&1));
+/// assert!(divisors.contains(&2));
+/// assert!(divisors.contains(&4));
+/// assert!(divisors.contains(&8));
+/// ```
 pub fn get_divisors(x: usize) -> HashSet<usize> {
     let mut divisors = HashSet::new();
     let mut i = 1;
