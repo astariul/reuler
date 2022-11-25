@@ -1,13 +1,16 @@
+use std::collections::HashSet;
+
+/// Iteratively compute the Fibonacci sequence.
 pub struct Fibonacci {
     pub curr: usize,
     pub next: usize,
 }
 
-// Implement `Iterator` for `Fibonacci`.
+/// Implement `Iterator` for `Fibonacci`.
 impl Iterator for Fibonacci {
     type Item = usize;
 
-    // Define how to compute the next step.
+    /// Define how to compute the next step.
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.curr;
 
@@ -18,6 +21,7 @@ impl Iterator for Fibonacci {
     }
 }
 
+/// Iteratively compute the primes numbers.
 pub struct Primes {
     p: usize,
     previous_primes: Vec<usize>,
@@ -96,4 +100,20 @@ impl Iterator for Primes {
             }
         }
     }
+}
+
+/// Compute the list of divisors for the given number.
+pub fn get_divisors(x: usize) -> HashSet<usize> {
+    let mut divisors = HashSet::new();
+    let mut i = 1;
+
+    while i as f64 <= (x as f64).sqrt() {
+        if x % i == 0 {
+            divisors.insert(i);
+            divisors.insert(x / i);
+        }
+
+        i += 1;
+    }
+    divisors
 }
