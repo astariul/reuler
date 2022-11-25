@@ -1,6 +1,5 @@
 use std::collections::HashSet;
 
-
 /// Iteratively compute the Fibonacci sequence.
 pub struct Fibonacci {
     pub curr: usize,
@@ -102,7 +101,6 @@ impl Iterator for Primes {
         }
     }
 }
-
 
 /// Compute the list of divisors for the given number.
 pub fn get_divisors(x: usize) -> HashSet<usize> {
