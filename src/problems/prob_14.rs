@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 
-
 /// Define a Collatz structure, that will keep intermediate results in memory,
 /// using dynamic programming.
 struct Collatz {
@@ -13,7 +12,7 @@ impl Collatz {
         // We already know the sequence lenght for 1, which is the end of every sequence
         let mut init_mem = HashMap::new();
         init_mem.insert(1, 1);
-        
+
         Collatz { mem: init_mem }
     }
 
@@ -37,7 +36,6 @@ impl Collatz {
         }
     }
 }
-
 
 /// Compute the starting number under the given limit that produces the longest
 /// Collatz sequence.
