@@ -2,7 +2,7 @@
 fn power_digit_sum(x: usize, p: usize) -> usize {
     // Store each digit in a vector that will grow over time
     let mut digits = vec![x];
-    
+
     for _ in 1..p {
         // Multiply each digit by x, and don't forget to carry over !
         let mut carry_over = 0;
