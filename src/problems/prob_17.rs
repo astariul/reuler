@@ -105,7 +105,7 @@ fn count_number_letters(limit: usize) -> Result<usize, String> {
     Ok(sum)
 }
 
-/// Solve the problem #16 and return the solution.
+/// Solve the problem #17 and return the solution.
 pub fn solve() -> String {
     count_number_letters(1000).unwrap().to_string()
 }
