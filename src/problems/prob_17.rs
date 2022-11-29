@@ -7,7 +7,9 @@
 fn write_number_in_words(n: usize, sub: bool) -> Result<String, String> {
     // Return error for inputs that we can't handle
     if n >= 1000000 {
-        return Err(String::from("`write_number_in_words()` cannot handle 1 000 000 and above."));
+        return Err(String::from(
+            "`write_number_in_words()` cannot handle 1 000 000 and above.",
+        ));
     }
 
     Ok(match n {
@@ -40,21 +42,37 @@ fn write_number_in_words(n: usize, sub: bool) -> Result<String, String> {
                 match n % 1000 {
                     0 => format!("{} thousand", thousands),
                     r => match r / 100 {
-                        0 => format!("{} thousand and {}", thousands, write_number_in_words(r, false).unwrap()),
-                        _ => format!("{} thousand {}", thousands, write_number_in_words(r, false).unwrap()),
+                        0 => format!(
+                            "{} thousand and {}",
+                            thousands,
+                            write_number_in_words(r, false).unwrap()
+                        ),
+                        _ => format!(
+                            "{} thousand {}",
+                            thousands,
+                            write_number_in_words(r, false).unwrap()
+                        ),
                     },
                 }
             } else if n / 100 > 0 {
                 let hundreds = write_number_in_words(n / 100, true).unwrap();
                 match n % 100 {
                     0 => format!("{} hundred", hundreds),
-                    r if sub => format!("{} hundred {}", hundreds, write_number_in_words(r, false).unwrap()),
-                    r => format!("{} hundred and {}", hundreds, write_number_in_words(r, false).unwrap())
+                    r if sub => format!(
+                        "{} hundred {}",
+                        hundreds,
+                        write_number_in_words(r, false).unwrap()
+                    ),
+                    r => format!(
+                        "{} hundred and {}",
+                        hundreds,
+                        write_number_in_words(r, false).unwrap()
+                    ),
                 }
             } else {
                 let remains = match n % 10 {
                     0 => String::from(""),
-                    r => format!("-{}", write_number_in_words(r, false).unwrap())
+                    r => format!("-{}", write_number_in_words(r, false).unwrap()),
                 };
                 match n / 10 {
                     2 => format!("twenty{}", remains),
@@ -68,7 +86,7 @@ fn write_number_in_words(n: usize, sub: bool) -> Result<String, String> {
                     _ => panic!("Unreachable code"),
                 }
             }
-        },
+        }
     })
 }
 
@@ -113,12 +131,18 @@ mod tests {
 
     #[test]
     fn test_writer_full() {
-        assert_eq!(write_number_in_words(1225, false).unwrap(), "one thousand two hundred and twenty-five");
+        assert_eq!(
+            write_number_in_words(1225, false).unwrap(),
+            "one thousand two hundred and twenty-five"
+        );
     }
 
     #[test]
     fn test_writer_thousand_alone() {
-        assert_eq!(write_number_in_words(3000, false).unwrap(), "three thousand");
+        assert_eq!(
+            write_number_in_words(3000, false).unwrap(),
+            "three thousand"
+        );
     }
 
     #[test]
@@ -133,21 +157,33 @@ mod tests {
 
     #[test]
     fn test_writer_dec_without_hundred() {
-        assert_eq!(write_number_in_words(1068, false).unwrap(), "one thousand and sixty-eight");
+        assert_eq!(
+            write_number_in_words(1068, false).unwrap(),
+            "one thousand and sixty-eight"
+        );
     }
 
     #[test]
     fn test_writer_ext_call() {
-        assert_eq!(write_number_in_words(120, false).unwrap(), "one hundred and twenty");
+        assert_eq!(
+            write_number_in_words(120, false).unwrap(),
+            "one hundred and twenty"
+        );
     }
 
     #[test]
     fn test_writer_int_call() {
-        assert_eq!(write_number_in_words(120, true).unwrap(), "one hundred twenty");
+        assert_eq!(
+            write_number_in_words(120, true).unwrap(),
+            "one hundred twenty"
+        );
     }
 
     #[test]
     fn test_writer_hundred_thousand() {
-        assert_eq!(write_number_in_words(240005, false).unwrap(), "two hundred forty thousand and five");
+        assert_eq!(
+            write_number_in_words(240005, false).unwrap(),
+            "two hundred forty thousand and five"
+        );
     }
 }
