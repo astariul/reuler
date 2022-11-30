@@ -1,6 +1,5 @@
 use std::cmp;
 
-
 struct Triangle {
     pub rows: Vec<Vec<usize>>,
 }
@@ -28,9 +27,7 @@ impl Triangle {
             triangle.push(row);
         }
 
-        Triangle {
-            rows: triangle,
-        }
+        Triangle { rows: triangle }
     }
 
     /// Find the maximum sum path from the top of the triangle to the bottom.
