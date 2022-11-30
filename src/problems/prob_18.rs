@@ -1,6 +1,6 @@
 use std::cmp;
 
-struct Triangle {
+pub struct Triangle {
     pub rows: Vec<Vec<usize>>,
 }
 
