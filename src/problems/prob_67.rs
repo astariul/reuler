@@ -1,6 +1,5 @@
 use crate::problems::prob_18;
 
-
 /// Solve the problem #67 and return the solution.
 pub fn solve() -> String {
     let triangle_content = include_str!("data/triangle.txt");
