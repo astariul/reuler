@@ -1,4 +1,4 @@
-/// Function computing if a given year is a leap year or not. 
+/// Function computing if a given year is a leap year or not.
 fn is_leap(year: usize) -> bool {
     if year % 100 == 0 {
         year % 400 == 0
@@ -26,7 +26,7 @@ fn nb_sundays_first_of_month_between(start_year: usize, end_year: usize) -> Resu
     let mut i = 0;
     let mut n_sundays = 0;
 
-    let is_sunday = |i| { i % 7 == 6 };    // Monday is 0, so Sunday is 6
+    let is_sunday = |i| i % 7 == 6; // Monday is 0, so Sunday is 6
 
     // Iterate day by day
     while year <= end_year {
@@ -43,22 +43,22 @@ fn nb_sundays_first_of_month_between(start_year: usize, end_year: usize) -> Resu
             4 | 6 | 9 | 11 if day == 30 => {
                 day = 1;
                 month += 1;
-            },
+            }
             1 | 3 | 5 | 7 | 8 | 10 | 12 if day == 31 => {
                 day = 1;
                 month += 1;
-            },
+            }
             2 if !is_leap(year) && day == 28 => {
                 day = 1;
                 month += 1;
-            },
+            }
             2 if is_leap(year) && day == 29 => {
                 day = 1;
                 month += 1;
-            },
+            }
             _ => {
                 day += 1;
-            },
+            }
         }
 
         // Update the year if necessary
@@ -72,7 +72,9 @@ fn nb_sundays_first_of_month_between(start_year: usize, end_year: usize) -> Resu
 
 /// Solve the problem #19 and return the solution.
 pub fn solve() -> String {
-    nb_sundays_first_of_month_between(1901, 2000).unwrap().to_string()
+    nb_sundays_first_of_month_between(1901, 2000)
+        .unwrap()
+        .to_string()
 }
 
 #[cfg(test)]
