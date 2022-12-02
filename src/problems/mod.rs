@@ -10,6 +10,7 @@ pub mod prob_17;
 pub mod prob_18;
 pub mod prob_19;
 pub mod prob_2;
+pub mod prob_20;
 pub mod prob_3;
 pub mod prob_4;
 pub mod prob_5;
