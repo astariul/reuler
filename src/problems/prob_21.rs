@@ -1,15 +1,13 @@
-use std::collections::HashSet;
 use crate::utils;
-
+use std::collections::HashSet;
 
 /// Compute the d() function as defined in the problem : the sum of proper
 /// divisors of n.
 fn d(n: usize) -> usize {
     let mut divisors = utils::get_divisors(n);
-    divisors.remove(&n);     // We want the proper divisors, not just the divisors
+    divisors.remove(&n); // We want the proper divisors, not just the divisors
     divisors.iter().sum()
 }
-
 
 /// Compute the sum of all amicable numbers under the given limit.
 fn sum_amicable_numbers_under(limit: usize) -> usize {
