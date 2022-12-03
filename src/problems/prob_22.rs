@@ -10,17 +10,24 @@ fn name_score(names: &str) -> usize {
     names.sort();
 
     // Compute the score of each name
-    let name_scores: Vec<usize> = names.iter().map(|name| -> usize {
-        name.as_bytes()
-            .iter()
-            .map(|b| usize::from(b - 64))
-            .collect::<Vec<usize>>()
-            .iter()
-            .sum()
-    }).collect();
-    
+    let name_scores: Vec<usize> = names
+        .iter()
+        .map(|name| -> usize {
+            name.as_bytes()
+                .iter()
+                .map(|b| usize::from(b - 64))
+                .collect::<Vec<usize>>()
+                .iter()
+                .sum()
+        })
+        .collect();
+
     // Compute total score
-    name_scores.iter().enumerate().map(|(i, score)| (i + 1) * score).sum()
+    name_scores
+        .iter()
+        .enumerate()
+        .map(|(i, score)| (i + 1) * score)
+        .sum()
 }
 
 /// Solve the problem #22 and return the solution.
