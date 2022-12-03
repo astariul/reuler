@@ -56,6 +56,7 @@ pub fn solve(problem_id: isize) -> Result<String, String> {
         18 => return Ok(problems::prob_18::solve()),
         19 => return Ok(problems::prob_19::solve()),
         20 => return Ok(problems::prob_20::solve()),
+        21 => return Ok(problems::prob_21::solve()),
         67 => return Ok(problems::prob_67::solve()),
         _ => return Err(format!("The solution for the problem #{problem_id} is not yet implemented. Consider contributing !")),
     }
