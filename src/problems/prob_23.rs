@@ -1,7 +1,6 @@
 use crate::utils;
 use std::collections::HashSet;
 
-
 /// Compute the sum of all positive integers which cannot be written as the sum
 /// of 2 abundant numbers.
 fn non_abundant_sum() -> usize {
@@ -24,7 +23,7 @@ fn non_abundant_sum() -> usize {
             if &n > an && abundant_numbers.contains(&(n - an)) {
                 is_abundant_sum = true;
                 break;
-            } 
+            }
         }
 
         if !is_abundant_sum {

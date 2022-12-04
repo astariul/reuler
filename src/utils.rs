@@ -176,7 +176,6 @@ pub fn get_divisors(x: usize) -> HashSet<usize> {
     divisors
 }
 
-
 /// Compute the list of **proper** divisors for the given number.
 ///
 /// # Examples
