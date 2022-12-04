@@ -4,8 +4,7 @@ use std::collections::HashSet;
 /// Compute the d() function as defined in the problem : the sum of proper
 /// divisors of n.
 fn d(n: usize) -> usize {
-    let mut divisors = utils::get_divisors(n);
-    divisors.remove(&n); // We want the proper divisors, not just the divisors
+    let divisors = utils::get_proper_divisors(n);
     divisors.iter().sum()
 }
 
