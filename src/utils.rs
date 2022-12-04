@@ -175,3 +175,21 @@ pub fn get_divisors(x: usize) -> HashSet<usize> {
     }
     divisors
 }
+
+
+/// Compute the list of **proper** divisors for the given number.
+///
+/// # Examples
+/// ```
+/// let divisors = reuler::utils::get_proper_divisors(8);
+///
+/// assert_eq!(divisors.len(), 3);
+/// assert!(divisors.contains(&1));
+/// assert!(divisors.contains(&2));
+/// assert!(divisors.contains(&4));
+/// ```
+pub fn get_proper_divisors(x: usize) -> HashSet<usize> {
+    let mut divisors = get_divisors(x);
+    divisors.remove(&x);
+    divisors
+}
