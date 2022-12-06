@@ -1,35 +1,49 @@
 /// Compute all possible permutations for a given vector of elements.
-fn permutations(elements: Vec<char>) -> Vec<String> {
-    let mut elements = elements.clone();
+///
+/// # Note
+/// This function returns the permutations in lexical order (the given elements
+/// are first sorted).
+fn permutations(elements: &mut Vec<char>) -> Vec<String> {
+    let mut permuts = vec![];
 
-    if elements.len() == 1 {
-        return elements.iter().map(|c| c.to_string()).collect();
-    }
+    // We want the lexical order, so sort the given elements
+    elements.sort();
 
-    // Recursive call
-    let extracted_elem = elements.pop().unwrap();
-    let size = elements.len();
-    let sub_permutations = permutations(elements);
+    loop {
+        // Add the current permutation (turn the list of characters into string before)
+        let current_permutation = elements.clone().iter().map(|c| c.to_string()).collect();
+        permuts.push(current_permutation);
 
-    let mut perms = Vec::new();
-    for pos in 0..size + 1 {
-        let mut subp = sub_permutations.clone();
-        for i in 0..subp.len() {
-            subp[i].insert(pos, extracted_elem);
+        // get the next permutation in lexicographical order
+        let mut i = elements.len() - 1;
+        while i > 0 && elements[i - 1] >= elements[i] {
+            i -= 1;
         }
-        perms.extend(subp);
+
+        // If there are no more permutations, break out of the loop
+        if i == 0 {
+            break;
+        }
+
+        let mut j = elements.len() - 1;
+        while elements[j] <= elements[i - 1] {
+            j -= 1;
+        }
+
+        elements.swap(i - 1, j);
+        elements[i..].reverse();
     }
-    perms
+
+    permuts
 }
 
 
 /// Compute the n-th permutation for up to the given digit.
 fn n_permutation(digit_limit: usize, n: usize) -> String {
-    let digits = (0..digit_limit + 1).map(|d| char::from_digit(d as u32, 10).unwrap()).collect();
-    let mut permuts = permutations(digits);
+    let mut digits = (0..digit_limit + 1).map(|d| char::from_digit(d as u32, 10).unwrap()).collect();
+    let mut permuts = permutations(&mut digits);
 
-    // Sort the permutations alphabetically
-    // permuts.sort();
+    let x = permuts.len();
 
     // Return the right indice
     permuts.remove(n - 1)
@@ -56,10 +70,7 @@ mod tests {
 
     #[test]
     fn test_permutations() {
-        let r = permutations((0..3).map(|d| char::from_digit(d as u32, 10).unwrap()).collect());
-        for x in r.iter() {
-            println!("{x}");
-        }
+        let r = permutations(&mut (0..3).map(|d| char::from_digit(d as u32, 10).unwrap()).collect());
         assert_eq!(r.len(), 6);
         assert!(r.contains(&String::from("012")));
         assert!(r.contains(&String::from("021")));
