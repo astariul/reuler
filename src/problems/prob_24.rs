@@ -16,7 +16,10 @@ impl Permutations {
         // We want the lexical order, so sort the given elements
         elements.sort();
 
-        Self { elements: elements, is_end: false }
+        Self {
+            elements: elements,
+            is_end: false,
+        }
     }
 }
 
@@ -33,7 +36,12 @@ impl Iterator for Permutations {
 
         // Get the current permutation (turn the list of characters into string before)
         // This is what we will return for this iteration
-        let current_permutation = self.elements.clone().iter().map(|c| c.to_string()).collect();
+        let current_permutation = self
+            .elements
+            .clone()
+            .iter()
+            .map(|c| c.to_string())
+            .collect();
 
         // From here, compute the next permutation in lexicographical order
         let mut i = self.elements.len() - 1;
@@ -60,10 +68,11 @@ impl Iterator for Permutations {
     }
 }
 
-
 /// Compute the n-th permutation for up to the given digit.
 fn n_permutation(digit_limit: usize, n: usize) -> String {
-    let digits = (0..digit_limit + 1).map(|d| char::from_digit(d as u32, 10).unwrap()).collect();
+    let digits = (0..digit_limit + 1)
+        .map(|d| char::from_digit(d as u32, 10).unwrap())
+        .collect();
     let permuts = Permutations::new(digits);
 
     for (i, p) in permuts.enumerate() {
@@ -72,7 +81,9 @@ fn n_permutation(digit_limit: usize, n: usize) -> String {
         }
     }
 
-    panic!("The given n ({n}) is too big, there is not that much permutations. Provide a smaller n.")
+    panic!(
+        "The given n ({n}) is too big, there is not that much permutations. Provide a smaller n."
+    )
 }
 
 /// Solve the problem #24 and return the solution.
@@ -96,7 +107,11 @@ mod tests {
 
     #[test]
     fn test_permutations() {
-        let mut permuts = Permutations::new((0..3).map(|d| char::from_digit(d as u32, 10).unwrap()).collect());
+        let mut permuts = Permutations::new(
+            (0..3)
+                .map(|d| char::from_digit(d as u32, 10).unwrap())
+                .collect(),
+        );
         assert_eq!(permuts.next().unwrap(), String::from("012"));
         assert_eq!(permuts.next().unwrap(), String::from("021"));
         assert_eq!(permuts.next().unwrap(), String::from("102"));
