@@ -302,6 +302,11 @@ impl ops::Mul<usize> for BigInt {
             carry_over = carry_over / 10;
         }
 
+        // If we multiply by 0, we have to remove some digits to have only a single 0
+        while self.digits.len() > 1 && self.digits[self.digits.len() - 1] == 0 {
+            self.digits.pop();
+        }
+
         self
     }
 }
@@ -329,5 +334,20 @@ mod tests {
     #[test]
     fn test_bigint_new() {
         assert_eq!(BigInt::new(), BigInt::from(0));
+    }
+
+    #[test]
+    fn test_bigint_multiplication_1() {
+        assert_eq!(BigInt::from(75) * 3, BigInt::from(75 * 3));
+    }
+
+    #[test]
+    fn test_bigint_multiplication_2() {
+        assert_eq!(BigInt::from(3) * 75, BigInt::from(3 * 75));
+    }
+
+    #[test]
+    fn test_bigint_multiplication_by_zero() {
+        assert_eq!(BigInt::from(9888) * 0, BigInt::new());
     }
 }
