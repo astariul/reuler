@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::ops;
 
 /// Iteratively compute the Fibonacci sequence.
 ///
@@ -191,4 +192,142 @@ pub fn get_proper_divisors(x: usize) -> HashSet<usize> {
     let mut divisors = get_divisors(x);
     divisors.remove(&x);
     divisors
+}
+
+
+/// Structure used to deal with arbtrarily large numbers.
+///
+/// # Note
+/// For now, only addition between two BigInt, and multiplication between a
+/// BigInt and a `u8` is supported.
+///
+/// # Examples
+/// ```
+/// let mut x = reuler::utils::BigInt::from(128);
+/// let y = reuler::utils::BigInt::new();  // It's 0
+/// x = x + y;
+/// x = x * 2;
+///
+/// assert_eq!(x.to_string(), String::from("256"));
+/// ```
+#[derive(Debug, PartialEq)]
+pub struct BigInt {
+    pub digits: Vec<usize>,
+}
+
+impl BigInt {
+    /// Create a new BigInt, starting at 0. To create a BigInt from an existing
+    /// number, use `BigInt::from()` instead.
+    pub fn new() -> Self {
+        Self { digits: vec![0] }
+    }
+
+    /// Create a new BigInt from the given number.
+    pub fn from(mut x: usize) -> Self {
+        let mut x_digits = Vec::new();
+        while x != 0 || x_digits.len() == 0 {
+            // build the number, digit by digit
+            x_digits.push(x % 10);
+
+            x = x / 10;
+        }
+        Self { digits: x_digits }
+    }
+
+    /// Function to get the number as a string.
+    pub fn to_string(&self) -> String {
+        let mut s = String::new();
+        for d in self.digits.iter().rev() {
+            s.push_str(&d.to_string());
+        }
+        s
+    }
+}
+
+impl ops::Add<BigInt> for BigInt {
+    type Output = BigInt;
+
+    /// Overload the addition for BigInt.
+    fn add(mut self, x: BigInt) -> Self::Output {
+        // Make both digits the same length
+        while self.digits.len() < x.digits.len() {
+            self.digits.push(0);
+        }
+
+        // Add the digits together, one-by-one
+        let mut carry_over = 0;
+        for i in 0..self.digits.len() {
+            let x_digit = if i < x.digits.len() { x.digits[i] } else { 0 }; 
+            let digit_result = self.digits[i] + x_digit + carry_over;
+
+            // Update the current digit
+            self.digits[i] = digit_result % 10;
+
+            // Update carry over
+            carry_over = digit_result / 10;
+        }
+
+        while carry_over != 0 {
+            // We have a carry over left, add a new digit
+            self.digits.push(carry_over % 10);
+
+            carry_over = carry_over / 10;
+        }
+
+        self
+    }
+}
+
+impl ops::Mul<usize> for BigInt {
+    type Output = BigInt;
+
+    /// Overload the multiplication for BigInt.
+    fn mul(mut self, x: usize) -> Self::Output {
+        // Multiply each digit, one-by-one
+        let mut carry_over = 0;
+        for i in 0..self.digits.len() {
+            let digit_result = self.digits[i] * x + carry_over;
+
+            // Update the current digit
+            self.digits[i] = digit_result % 10;
+
+            // Update carry over
+            carry_over = digit_result / 10;
+        }
+
+        while carry_over != 0 {
+            // We have a carry over left, add a new digit
+            self.digits.push(carry_over % 10);
+
+            carry_over = carry_over / 10;
+        }
+
+        self
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_bigint_addition_same_number_of_digits() {
+        assert_eq!(BigInt::from(125) + BigInt::from(988), BigInt::from(125 + 988));
+    }
+
+    #[test]
+    fn test_bigint_addition_more_digits() {
+        assert_eq!(BigInt::from(125) + BigInt::from(7), BigInt::from(125 + 7));
+    }
+
+    #[test]
+    fn test_bigint_addition_less_digits() {
+        assert_eq!(BigInt::from(56) + BigInt::from(4852), BigInt::from(56 + 4852));
+    }
+
+    #[test]
+    fn test_bigint_new() {
+        assert_eq!(BigInt::new(), BigInt::from(0));
+    }
 }
