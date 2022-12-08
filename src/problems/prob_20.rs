@@ -6,7 +6,7 @@ fn factorial_digit_sum(x: usize) -> usize {
     let mut number = utils::BigInt::from(1);
 
     for mul_factor in 2..x + 1 {
-        number = number * mul_factor;
+        number *= mul_factor;
     }
 
     // Sum the digits of our big number

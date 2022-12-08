@@ -6,7 +6,7 @@ fn power_digit_sum(x: usize, p: usize) -> usize {
     let mut number = utils::BigInt::from(x);
 
     for _ in 1..p {
-        number = number * x;
+        number *= x;
     }
 
     // Sum the digits of our big number

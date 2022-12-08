@@ -198,15 +198,15 @@ pub fn get_proper_divisors(x: usize) -> HashSet<usize> {
 /// Structure used to deal with arbtrarily large numbers.
 ///
 /// # Note
-/// For now, only addition between two BigInt, and multiplication between a
-/// BigInt and a `u8` is supported.
+/// For now, only addition between two BigInt, and multiplication-assign with
+/// a `usize` is supported.
 ///
 /// # Examples
 /// ```
 /// let mut x = reuler::utils::BigInt::from(128);
 /// let y = reuler::utils::BigInt::new();  // It's 0
 /// x = x + y;
-/// x = x * 2;
+/// x *= 2;
 ///
 /// assert_eq!(x.to_string(), String::from("256"));
 /// ```
@@ -278,11 +278,9 @@ impl ops::Add<BigInt> for BigInt {
     }
 }
 
-impl ops::Mul<usize> for BigInt {
-    type Output = BigInt;
-
-    /// Overload the multiplication for BigInt.
-    fn mul(mut self, x: usize) -> Self::Output {
+impl ops::MulAssign<usize> for BigInt {
+    /// Overload the multiplication-assign for BigInt.
+    fn mul_assign(&mut self, x: usize) {
         // Multiply each digit, one-by-one
         let mut carry_over = 0;
         for i in 0..self.digits.len() {
@@ -306,8 +304,6 @@ impl ops::Mul<usize> for BigInt {
         while self.digits.len() > 1 && self.digits[self.digits.len() - 1] == 0 {
             self.digits.pop();
         }
-
-        self
     }
 }
 
@@ -338,16 +334,22 @@ mod tests {
 
     #[test]
     fn test_bigint_multiplication_1() {
-        assert_eq!(BigInt::from(75) * 3, BigInt::from(75 * 3));
+        let mut big_int = BigInt::from(75);
+        big_int *= 3;
+        assert_eq!(big_int, BigInt::from(75 * 3));
     }
 
     #[test]
     fn test_bigint_multiplication_2() {
-        assert_eq!(BigInt::from(3) * 75, BigInt::from(3 * 75));
+        let mut big_int = BigInt::from(3);
+        big_int *= 75;
+        assert_eq!(big_int, BigInt::from(3 * 75));
     }
 
     #[test]
     fn test_bigint_multiplication_by_zero() {
-        assert_eq!(BigInt::from(9888) * 0, BigInt::new());
+        let mut big_int = BigInt::from(9888);
+        big_int *= 0;
+        assert_eq!(big_int, BigInt::new());
     }
 }
