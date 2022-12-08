@@ -14,7 +14,7 @@ fn n_digit_fibonacci(n: usize) -> usize {
         let next_next = &curr + &next;
         curr = next;
         next = next_next;
-        
+
         i += 1;
     }
     i

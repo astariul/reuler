@@ -194,7 +194,6 @@ pub fn get_proper_divisors(x: usize) -> HashSet<usize> {
     divisors
 }
 
-
 /// Structure used to deal with arbtrarily large numbers.
 ///
 /// # Note
@@ -260,7 +259,7 @@ impl ops::Add<&BigInt> for &BigInt {
         // Add the digits together, one-by-one
         let mut carry_over = 0;
         for i in 0..digits.len() {
-            let x_digit = if i < x.digits.len() { x.digits[i] } else { 0 }; 
+            let x_digit = if i < x.digits.len() { x.digits[i] } else { 0 };
             let digit_result = digits[i] + x_digit + carry_over;
 
             // Update the current digit
@@ -310,14 +309,16 @@ impl ops::MulAssign<usize> for BigInt {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_bigint_addition_same_number_of_digits() {
-        assert_eq!(&BigInt::from(125) + &BigInt::from(988), BigInt::from(125 + 988));
+        assert_eq!(
+            &BigInt::from(125) + &BigInt::from(988),
+            BigInt::from(125 + 988)
+        );
     }
 
     #[test]
@@ -327,7 +328,10 @@ mod tests {
 
     #[test]
     fn test_bigint_addition_less_digits() {
-        assert_eq!(&BigInt::from(56) + &BigInt::from(4852), BigInt::from(56 + 4852));
+        assert_eq!(
+            &BigInt::from(56) + &BigInt::from(4852),
+            BigInt::from(56 + 4852)
+        );
     }
 
     #[test]
