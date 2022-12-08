@@ -205,7 +205,7 @@ pub fn get_proper_divisors(x: usize) -> HashSet<usize> {
 /// ```
 /// let mut x = reuler::utils::BigInt::from(128);
 /// let y = reuler::utils::BigInt::new();  // It's 0
-/// x = x + y;
+/// x = &x + &y;
 /// x *= 2;
 ///
 /// assert_eq!(x.to_string(), String::from("256"));
@@ -244,11 +244,11 @@ impl BigInt {
     }
 }
 
-impl ops::Add<BigInt> for BigInt {
+impl ops::Add<&BigInt> for &BigInt {
     type Output = BigInt;
 
     /// Overload the addition for BigInt.
-    fn add(self, x: BigInt) -> Self::Output {
+    fn add(self, x: &BigInt) -> Self::Output {
         // Clone the digits of self, we will update them and create a new BigInt
         let mut digits = self.digits.clone();
 
@@ -277,7 +277,7 @@ impl ops::Add<BigInt> for BigInt {
             carry_over = carry_over / 10;
         }
 
-        Self { digits: digits }
+        BigInt { digits: digits }
     }
 }
 
@@ -317,17 +317,17 @@ mod tests {
 
     #[test]
     fn test_bigint_addition_same_number_of_digits() {
-        assert_eq!(BigInt::from(125) + BigInt::from(988), BigInt::from(125 + 988));
+        assert_eq!(&BigInt::from(125) + &BigInt::from(988), BigInt::from(125 + 988));
     }
 
     #[test]
     fn test_bigint_addition_more_digits() {
-        assert_eq!(BigInt::from(125) + BigInt::from(7), BigInt::from(125 + 7));
+        assert_eq!(&BigInt::from(125) + &BigInt::from(7), BigInt::from(125 + 7));
     }
 
     #[test]
     fn test_bigint_addition_less_digits() {
-        assert_eq!(BigInt::from(56) + BigInt::from(4852), BigInt::from(56 + 4852));
+        assert_eq!(&BigInt::from(56) + &BigInt::from(4852), BigInt::from(56 + 4852));
     }
 
     #[test]
