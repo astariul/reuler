@@ -20,7 +20,7 @@ fn n_digit_fibonacci(n: usize) -> usize {
     i
 }
 
-/// Solve the problem #24 and return the solution.
+/// Solve the problem #25 and return the solution.
 pub fn solve() -> String {
     n_digit_fibonacci(1000).to_string()
 }
