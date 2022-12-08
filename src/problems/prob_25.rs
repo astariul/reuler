@@ -1,21 +1,23 @@
 use crate::utils;
 
 /// Compute the index of the first Fibonacci term with n digits.
-fn n_digit_fibonacci(n: u32) -> usize {
+fn n_digit_fibonacci(n: usize) -> usize {
     if n == 0 {
         panic!("A number can't have 0 digits !");
     }
-    
-    let base = 10_usize.pow(n - 1);
-    let fibo = utils::Fibonacci { curr: 1, next: 1 };
 
-    for (i, x) in fibo.enumerate() {
-        if x / base > 0 {
-            return i + 1;
-        }
+    let mut curr = utils::BigInt::from(1);
+    let mut next = utils::BigInt::from(1);
+    let mut i = 1;
+
+    while curr.to_string().len() < n {
+        let next_next = &curr + &next;
+        curr = next;
+        next = next_next;
+        
+        i += 1;
     }
-
-    panic!("Unreachable code");
+    i
 }
 
 /// Solve the problem #24 and return the solution.
