@@ -248,20 +248,23 @@ impl ops::Add<BigInt> for BigInt {
     type Output = BigInt;
 
     /// Overload the addition for BigInt.
-    fn add(mut self, x: BigInt) -> Self::Output {
+    fn add(self, x: BigInt) -> Self::Output {
+        // Clone the digits of self, we will update them and create a new BigInt
+        let mut digits = self.digits.clone();
+
         // Make both digits the same length
-        while self.digits.len() < x.digits.len() {
-            self.digits.push(0);
+        while digits.len() < x.digits.len() {
+            digits.push(0);
         }
 
         // Add the digits together, one-by-one
         let mut carry_over = 0;
-        for i in 0..self.digits.len() {
+        for i in 0..digits.len() {
             let x_digit = if i < x.digits.len() { x.digits[i] } else { 0 }; 
-            let digit_result = self.digits[i] + x_digit + carry_over;
+            let digit_result = digits[i] + x_digit + carry_over;
 
             // Update the current digit
-            self.digits[i] = digit_result % 10;
+            digits[i] = digit_result % 10;
 
             // Update carry over
             carry_over = digit_result / 10;
@@ -269,12 +272,12 @@ impl ops::Add<BigInt> for BigInt {
 
         while carry_over != 0 {
             // We have a carry over left, add a new digit
-            self.digits.push(carry_over % 10);
+            digits.push(carry_over % 10);
 
             carry_over = carry_over / 10;
         }
 
-        self
+        Self { digits: digits }
     }
 }
 
