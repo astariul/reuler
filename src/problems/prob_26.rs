@@ -30,7 +30,7 @@ fn cycle_size(n: usize) -> usize {
 fn max_cycle_size_until(max: usize) -> usize {
     let mut cycle_max_size = 0;
     let mut cycle_max_n = 0;
-    
+
     for n in 1..max + 1 {
         let curr_cycle_size = cycle_size(n);
 
