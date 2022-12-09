@@ -31,7 +31,15 @@ fn max_cycle_size_until(max: usize) -> usize {
     let mut cycle_max_size = 0;
     let mut cycle_max_n = 0;
 
-    for n in 1..max + 1 {
+    // We know for any number n, the cycle size can't exceed n
+    // So start from the maximum number, and as soon as n is smaller than the
+    // current maximum cycle size, we can leave the loop
+    for n in (1..max + 1).rev() {
+        if n < cycle_max_size {
+            // Early break out of the loop
+            break;
+        }
+
         let curr_cycle_size = cycle_size(n);
 
         if curr_cycle_size > cycle_max_size {
