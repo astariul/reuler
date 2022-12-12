@@ -177,6 +177,42 @@ pub fn get_divisors(x: usize) -> HashSet<usize> {
     divisors
 }
 
+/// Compute the list of divisors for the given number.
+///
+/// # Examples
+/// ```
+/// assert!(!reuler::utils::is_prime(1));
+/// assert!(reuler::utils::is_prime(2));
+/// assert!(reuler::utils::is_prime(3));
+/// assert!(!reuler::utils::is_prime(8));
+/// ```
+pub fn is_prime(x: usize) -> bool {
+    match x {
+        1 => false,
+        2 => true,
+        _ if x % 2 == 0 => false,
+        _ => {
+            let divisors = get_divisors(x);
+            divisors.len() == 2
+        }
+    }
+}
+
+/// Compute the list of divisors for the given number.
+///
+/// # Examples
+/// ```
+/// assert!(!reuler::utils::is_prime_with_neg(8));
+/// assert!(!reuler::utils::is_prime_with_neg(-8));
+/// assert!(reuler::utils::is_prime_with_neg(3));
+/// assert!(reuler::utils::is_prime_with_neg(-3));
+/// assert!(!reuler::utils::is_prime_with_neg(8));
+/// ```
+pub fn is_prime_with_neg(x: isize) -> bool {
+    let x = if x < 0 { -x } else { x };
+    is_prime(usize::try_from(x).unwrap())
+}
+
 /// Compute the list of **proper** divisors for the given number.
 ///
 /// # Examples
