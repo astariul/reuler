@@ -1,12 +1,19 @@
+use crate::utils;
+
+
 /// Compute the size of the given quadratic formula. The size of the formula is
 /// the maximum values of n for consecutive values of n which gives primes.
 fn formula_size(a: isize, b: isize) -> usize {
     let mut n = 0;
 
     loop {
-        break;
+        let x = n * n + a * n + b;
+        if !utils::is_prime_with_neg(x) {
+            break;
+        }
+        n += 1;
     }
-    n
+    usize::try_from(n).unwrap()
 }
 
 /// Compute a * b where n^2 + an + b is a quadratic formula that gives the most
@@ -42,7 +49,7 @@ mod tests {
 
     #[test]
     fn test_given_example() {
-        assert_eq!(max_quadratic_formula(41), 41);
+        assert_eq!(max_quadratic_formula(41), -41);
     }
 
     #[test]
