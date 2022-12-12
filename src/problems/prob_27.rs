@@ -1,6 +1,5 @@
 use crate::utils;
 
-
 /// Compute the size of the given quadratic formula. The size of the formula is
 /// the maximum values of n for consecutive values of n which gives primes.
 fn formula_size(a: isize, b: isize) -> usize {

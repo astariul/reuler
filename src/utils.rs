@@ -190,11 +190,11 @@ pub fn is_prime(x: usize) -> bool {
     match x {
         1 => false,
         2 => true,
-        _ if x % 2 ==0 => false,
+        _ if x % 2 == 0 => false,
         _ => {
             let divisors = get_divisors(x);
             divisors.len() == 2
-        },
+        }
     }
 }
 
