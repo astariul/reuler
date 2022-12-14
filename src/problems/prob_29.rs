@@ -1,5 +1,5 @@
-use std::collections::HashSet;
 use crate::utils;
+use std::collections::HashSet;
 
 /// Compute the number of different a^b, where a and b can be any number
 /// between the given min and max.
