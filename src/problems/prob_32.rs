@@ -59,7 +59,6 @@ pub fn solve() -> String {
     sum_pandigital_products().to_string()
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
