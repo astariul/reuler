@@ -230,6 +230,23 @@ pub fn get_proper_divisors(x: usize) -> HashSet<usize> {
     divisors
 }
 
+/// Compute the Greatest Common Factor (GCF) between 2 numbers.
+///
+/// # Examples
+/// ```
+/// assert_eq!(reuler::utils::gcf(18, 27), 9);
+/// assert_eq!(reuler::utils::gcf(60, 48), 12);
+/// assert_eq!(reuler::utils::gcf(8, 9), 1);
+/// ```
+pub fn gcf(x: usize, y: usize) -> usize {
+    let mut x = x;
+    let mut y = y;
+    while y > 0 {
+        (x, y) = (y, x % y);
+    }
+    x
+}
+
 /// Structure used to deal with arbtrarily large numbers.
 ///
 /// # Note
