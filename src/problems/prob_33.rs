@@ -1,4 +1,3 @@
-
 use crate::utils;
 
 /// Check if a fraction is a non-trivial digit canceling fraction. This
