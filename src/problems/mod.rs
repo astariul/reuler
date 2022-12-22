@@ -25,6 +25,7 @@ pub mod prob_30;
 pub mod prob_31;
 pub mod prob_32;
 pub mod prob_33;
+pub mod prob_34;
 pub mod prob_4;
 pub mod prob_5;
 pub mod prob_6;
