@@ -5,7 +5,14 @@ fn is_circular_prime(x: usize) -> bool {
     let mut digits = Vec::new();
     let mut remain = x;
     while remain > 0 {
-        digits.push(remain % 10);
+        let d = remain % 10;
+
+        // Early leave if any of the digit is even
+        if d % 2 == 0 && x != 2 {
+            return false;
+        }
+
+        digits.push(d);
         remain = remain / 10;
     }
 
