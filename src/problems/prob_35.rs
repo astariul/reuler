@@ -1,6 +1,5 @@
 use crate::utils;
 
-
 fn is_circular_prime(x: usize) -> bool {
     // First, get the digits of the number
     let mut digits = Vec::new();
@@ -28,7 +27,6 @@ fn is_circular_prime(x: usize) -> bool {
     }
     true
 }
-
 
 /// Compute the number of circular prime numbers under a given limit.
 fn n_circular_prime_below(limit: usize) -> usize {
