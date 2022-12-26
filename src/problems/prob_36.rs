@@ -41,7 +41,7 @@ fn sum_double_base_palindromes(limit: usize) -> usize {
             sum += n;
         }
     }
-    sum    
+    sum
 }
 
 /// Solve the problem #36 and return the solution.
