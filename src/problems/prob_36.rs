@@ -1,12 +1,9 @@
+use crate::utils;
+
 /// Check if a given number is a double palindrome
 fn is_double_base_palindrome(x: usize) -> bool {
     // First, get the digits of the number in base 10
-    let mut digits = Vec::new();
-    let mut remain = x;
-    while remain > 0 {
-        digits.push(remain % 10);
-        remain = remain / 10;
-    }
+    let digits = utils::digits_of_base(x, 10);
 
     // Check if it's a palindrome
     for i in 0..digits.len() / 2 {
@@ -16,12 +13,7 @@ fn is_double_base_palindrome(x: usize) -> bool {
     }
 
     // Then do the same for base 2
-    let mut digits = Vec::new();
-    let mut remain = x;
-    while remain > 0 {
-        digits.push(remain % 2);
-        remain = remain / 2;
-    }
+    let digits = utils::digits_of_base(x, 2);
 
     for i in 0..digits.len() / 2 {
         if digits[i] != digits[digits.len() - i - 1] {

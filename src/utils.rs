@@ -247,6 +247,85 @@ pub fn gcf(x: usize, y: usize) -> usize {
     x
 }
 
+/// Function that extract the digits of a given number, in a given base.
+///
+/// # Notes
+/// This function returns the digits in reverse order. If you need to get the
+/// digits in "natural" order, call `.reverse()` on the results.
+///
+/// # Examples
+/// Get the digits of a number in base 10 :
+/// ```
+/// let digits = reuler::utils::digits_of_base(127, 10);
+///
+/// assert_eq!(digits.len(), 3);
+/// assert_eq!(digits[0], 7);
+/// assert_eq!(digits[1], 2);
+/// assert_eq!(digits[2], 1);
+/// ```
+///
+/// Get the digits of a number in base 10, in the "natural" order :
+/// ```
+/// let mut digits = reuler::utils::digits_of_base(127, 10);
+/// digits.reverse();
+///
+/// assert_eq!(digits.len(), 3);
+/// assert_eq!(digits[0], 1);
+/// assert_eq!(digits[1], 2);
+/// assert_eq!(digits[2], 7);
+/// ```
+///
+/// Get the digits of a number in base 2 :
+/// ```
+/// let digits = reuler::utils::digits_of_base(10, 2);
+///
+/// assert_eq!(digits.len(), 4);
+/// assert_eq!(digits[0], 0);
+/// assert_eq!(digits[1], 1);
+/// assert_eq!(digits[2], 0);
+/// assert_eq!(digits[1], 1);
+/// ```
+pub fn digits_of_base(x: usize, base: usize) -> Vec<usize> {
+    let mut digits = Vec::new();
+    let mut remain = x;
+    while remain > 0 || digits.len() == 0 {
+        digits.push(remain % base);
+        remain = remain / base;
+    }
+    digits
+}
+
+/// Function that extract the digits of a given number.
+///
+/// # Notes
+/// This function returns the digits in reverse order. If you need to get the
+/// digits in "natural" order, call `.reverse()` on the results.
+///
+/// # Examples
+/// Get the digits of a number :
+/// ```
+/// let digits = reuler::utils::digits_of(127);
+///
+/// assert_eq!(digits.len(), 3);
+/// assert_eq!(digits[0], 7);
+/// assert_eq!(digits[1], 2);
+/// assert_eq!(digits[2], 1);
+/// ```
+///
+/// Get the digits of a number, in the "natural" order :
+/// ```
+/// let mut digits = reuler::utils::digits_of(127);
+/// digits.reverse();
+///
+/// assert_eq!(digits.len(), 3);
+/// assert_eq!(digits[0], 1);
+/// assert_eq!(digits[1], 2);
+/// assert_eq!(digits[2], 7);
+/// ```
+pub fn digits_of(x: usize) -> Vec<usize> {
+    digits_of_base(x, 10)
+}
+
 /// Structure used to deal with arbtrarily large numbers.
 ///
 /// # Note
@@ -275,15 +354,8 @@ impl BigInt {
     }
 
     /// Create a new BigInt from the given number.
-    pub fn from(mut x: usize) -> Self {
-        let mut x_digits = Vec::new();
-        while x != 0 || x_digits.len() == 0 {
-            // build the number, digit by digit
-            x_digits.push(x % 10);
-
-            x = x / 10;
-        }
-        Self { digits: x_digits }
+    pub fn from(x: usize) -> Self {
+        Self { digits: digits_of(x) }
     }
 
     /// Function to get the number as a string.
@@ -411,5 +483,12 @@ mod tests {
         let mut big_int = BigInt::from(9888);
         big_int *= 0;
         assert_eq!(big_int, BigInt::new());
+    }
+
+    #[test]
+    fn test_digit_of_0() {
+        let digits = digits_of(0);
+        assert_eq!(digits.len(), 1);
+        assert_eq!(digits[0], 0);
     }
 }
