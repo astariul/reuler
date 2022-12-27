@@ -355,7 +355,9 @@ impl BigInt {
 
     /// Create a new BigInt from the given number.
     pub fn from(x: usize) -> Self {
-        Self { digits: digits_of(x) }
+        Self {
+            digits: digits_of(x),
+        }
     }
 
     /// Function to get the number as a string.
@@ -510,7 +512,9 @@ mod tests {
 /// assert!(!reuler::utils::is_palindrome(digits));
 /// ```
 pub fn is_palindrome<T>(x: Vec<T>) -> bool
-where T: std::cmp::PartialEq {
+where
+    T: std::cmp::PartialEq,
+{
     for i in 0..x.len() / 2 {
         if x[i] != x[x.len() - i - 1] {
             return false;
