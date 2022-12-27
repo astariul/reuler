@@ -2,18 +2,15 @@ use crate::utils;
 
 fn is_circular_prime(x: usize) -> bool {
     // First, get the digits of the number
-    let mut digits = Vec::new();
-    let mut remain = x;
-    while remain > 0 {
-        let d = remain % 10;
+    let mut digits = utils::digits_of(x);
 
-        // Early leave if any of the digit is even
-        if d % 2 == 0 && x != 2 {
-            return false;
+    // Early leave if any of the digit is even (unless it's 2)
+    if x != 2 {
+        for d in digits.iter() {
+            if d % 2 == 0 {
+                return false;
+            }
         }
-
-        digits.push(d);
-        remain = remain / 10;
     }
 
     // Then rotate it on every possible position and ensure each produced position is prime
