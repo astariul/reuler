@@ -492,3 +492,29 @@ mod tests {
         assert_eq!(digits[0], 0);
     }
 }
+
+/// Function that check if an iterable is a palindrome or not.
+///
+/// # Examples
+/// A number that is a palindrome :
+/// ```
+/// let digits = reuler::utils::digits_of(125521);
+///
+/// assert!(reuler::utils::is_palindrome(digits));
+/// ```
+///
+/// A number that is **not** a palindrome :
+/// ```
+/// let digits = reuler::utils::digits_of(129);
+///
+/// assert!(!reuler::utils::is_palindrome(digits));
+/// ```
+pub fn is_palindrome<T>(x: Vec<T>) -> bool
+where T: std::cmp::PartialEq {
+    for i in 0..x.len() / 2 {
+        if x[i] != x[x.len() - i - 1] {
+            return false;
+        }
+    }
+    true
+}

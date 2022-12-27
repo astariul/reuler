@@ -6,19 +6,15 @@ fn is_double_base_palindrome(x: usize) -> bool {
     let digits = utils::digits_of_base(x, 10);
 
     // Check if it's a palindrome
-    for i in 0..digits.len() / 2 {
-        if digits[i] != digits[digits.len() - i - 1] {
-            return false;
-        }
+    if !utils::is_palindrome(digits) {
+        return false;
     }
 
     // Then do the same for base 2
     let digits = utils::digits_of_base(x, 2);
 
-    for i in 0..digits.len() / 2 {
-        if digits[i] != digits[digits.len() - i - 1] {
-            return false;
-        }
+    if !utils::is_palindrome(digits) {
+        return false;
     }
 
     true
