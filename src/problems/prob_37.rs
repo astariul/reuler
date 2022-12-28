@@ -1,49 +1,47 @@
 use crate::utils;
 
-/// Check if a given number is a truncatable prime.
-fn is_truncatable_prime(x: usize) -> bool {
-    // Single digits numbers are never truncatable primes
-    if x < 10 {
-        return false;
-    }
-
-    // From right to left
-    let mut n = x;
-    while n != 0 {
-        if !utils::is_prime(n) {
-            return false;
-        }
-        n /= 10;
-    }
-
-    // From left to right
-    let mut m = 10;
-    while m < x {
-        if !utils::is_prime(x % m) {
-            return false;
-        }
-        m *= 10;
-    }
-
-    // If everything is prime, then it's a truncatable prime
-    true
-}
-
 /// Compute the sum of all truncatable primes.
 fn sum_truncatable_primes() -> usize {
     let mut sum = 0;
     let mut n_truncatable_primes = 0;
+    let mut curr_primes = vec![2, 3, 5, 7];
 
-    for p in utils::Primes::new() {
-        if is_truncatable_prime(p) {
-            sum += p;
-            n_truncatable_primes += 1;
+    // Iteratively add more digits to the right to build primes with x digits
+    'inf: loop {
+        let mut next_primes = Vec::new();
+        for p in curr_primes.iter() {
+            for i in [1, 3, 5, 7, 9] {
+                let next_p = p * 10 + i;
+                if utils::is_prime(next_p) {
+                    next_primes.push(next_p);
+                }
+            }
         }
 
-        // We know there is only 11 truncatable primes
-        if n_truncatable_primes == 11 {
-            break;
+        // Because of the way we build our primes, we know they are right-truncatable
+        // So just check if they are left-truncatable !
+        for p in next_primes.iter() {
+            let mut is_left_truncatable = true;
+            let mut m = 10;
+            while m < *p {
+                if !utils::is_prime(p % m) {
+                    is_left_truncatable = false;
+                    break;
+                }
+                m *= 10;
+            }
+
+            if is_left_truncatable {
+                sum += p;
+                n_truncatable_primes += 1;
+            }
+
+            if n_truncatable_primes == 11 {
+                break 'inf;
+            }
         }
+
+        curr_primes = next_primes;
     }
     sum
 }
@@ -51,29 +49,4 @@ fn sum_truncatable_primes() -> usize {
 /// Solve the problem #37 and return the solution.
 pub fn solve() -> String {
     sum_truncatable_primes().to_string()
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_is_truncatable_prime_true() {
-        assert!(is_truncatable_prime(3797));
-    }
-
-    #[test]
-    fn test_is_truncatable_prime_false_prime() {
-        assert!(!is_truncatable_prime(4493));
-    }
-
-    #[test]
-    fn test_is_truncatable_prime_false_non_prime() {
-        assert!(!is_truncatable_prime(333));
-    }
-
-    #[test]
-    fn test_is_truncatable_prime_false_single_digit_prime() {
-        assert!(!is_truncatable_prime(5));
-    }
 }
