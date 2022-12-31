@@ -8,7 +8,7 @@ fn which_p_maximize_n_triangle(limit: usize) -> usize {
     let mut counts = HashMap::new();
 
     // No need to iterate over limit / 2, because in that case the perimeter
-    // will be above the limit ! 
+    // will be above the limit !
     for c in 1..limit / 2 {
         // a and b are under c, because a^2 + b^2 = c^2
         for b in 1..c + 1 {
@@ -23,7 +23,11 @@ fn which_p_maximize_n_triangle(limit: usize) -> usize {
             }
         }
     }
-    *counts.iter().max_by_key(|entry| entry.1).unwrap_or((&0, &0)).0
+    *counts
+        .iter()
+        .max_by_key(|entry| entry.1)
+        .unwrap_or((&0, &0))
+        .0
 }
 
 /// Solve the problem #39 and return the solution.
