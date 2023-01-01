@@ -22,13 +22,13 @@ fn champernowne_constant(order: usize) -> usize {
             // If adding the current integer makes us go over the index we are
             // looking for, find the right digit
             let digits = utils::digits_of(integer);
-            let i = d_idx - n - 1;  // Get the right index
-            prod_result *= digits[digits.len() - i - 1];    // Don't forget the digits are in reverse order
-            
+            let i = d_idx - n - 1; // Get the right index
+            prod_result *= digits[digits.len() - i - 1]; // Don't forget the digits are in reverse order
+
             // Don't forget to update the next digit size we are looking for
             d_idx *= 10;
         }
-        
+
         // Just update n to know where we are
         n += digit_size;
     }
