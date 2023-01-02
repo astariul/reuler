@@ -464,6 +464,41 @@ where
     true
 }
 
+/// Compute all possible permutations of the given array.
+///
+/// # Examples
+/// ```
+/// let permutations = reuler::utils::permutations_of(vec![1, 2, 3]);
+///
+/// assert_eq!(permutations.len(), 6);
+/// assert_eq!(permutations[0], vec![3, 2, 1]);
+/// assert_eq!(permutations[1], vec![2, 3, 1]);
+/// assert_eq!(permutations[2], vec![2, 1, 3]);
+/// assert_eq!(permutations[3], vec![3, 1, 2]);
+/// assert_eq!(permutations[4], vec![1, 3, 2]);
+/// assert_eq!(permutations[5], vec![1, 2, 3]);
+/// ```
+pub fn permutations_of<T>(array: Vec<T>) -> Vec<Vec<T>> where T: Clone + Copy {
+    // Base case
+    if array.len() < 2 {
+        return vec![array];
+    }
+
+    // Recursive case
+    let mut sub_case = array.clone();
+    let first_element = sub_case.pop().unwrap();
+    let mut permutations = Vec::new();
+
+    for p in permutations_of(sub_case) {
+        for i in 0..p.len() + 1 {
+            let mut new_p = p.clone();
+            new_p.insert(i, first_element);
+            permutations.push(new_p);
+        }
+    }
+    permutations
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -520,5 +555,16 @@ mod tests {
         let digits = digits_of(0);
         assert_eq!(digits.len(), 1);
         assert_eq!(digits[0], 0);
+    }
+
+    #[test]
+    fn test_empty_permutation() {
+        assert_eq!(permutations_of(Vec::<usize>::new()).len(), 1);
+        assert_eq!(permutations_of(Vec::<usize>::new())[0].len(), 0);
+    }
+
+    #[test]
+    fn test_permutation_single_element() {
+        assert_eq!(permutations_of(vec![1]), vec![vec![1]]);
     }
 }
