@@ -39,7 +39,7 @@ fn largest_pandigital_prime() -> usize {
 
     // If we found a 7-pandigital prime, no need to check 4-pandigital !
     if largest_number > 0 {
-        return largest_number
+        return largest_number;
     }
 
     // Otherwise, check the 4-pandigital as well

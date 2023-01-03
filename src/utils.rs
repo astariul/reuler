@@ -478,7 +478,10 @@ where
 /// assert_eq!(permutations[4], vec![1, 3, 2]);
 /// assert_eq!(permutations[5], vec![1, 2, 3]);
 /// ```
-pub fn permutations_of<T>(array: Vec<T>) -> Vec<Vec<T>> where T: Clone + Copy {
+pub fn permutations_of<T>(array: Vec<T>) -> Vec<Vec<T>>
+where
+    T: Clone + Copy,
+{
     // Base case
     if array.len() < 2 {
         return vec![array];
