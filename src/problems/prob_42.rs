@@ -37,7 +37,10 @@ fn number_of_triangle_words(words: &str) -> usize {
     }
 
     // Finally, count the number of words that are triangle numbers
-    word_values.iter().map(|v| triangle_numbers.contains(&v) as usize).sum()
+    word_values
+        .iter()
+        .map(|v| triangle_numbers.contains(&v) as usize)
+        .sum()
 }
 
 /// Solve the problem #42 and return the solution.
