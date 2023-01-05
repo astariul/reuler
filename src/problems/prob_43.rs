@@ -11,10 +11,11 @@ use crate::utils;
 fn divisible_pandigital() -> usize {
     let mut sum = 0;
     for p in utils::permutations_of(vec![0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
-        // Consider the number is in reverse order
+        let p = utils::digits_to_number(p);
+        
         // Check all conditions
-        if utils::digits_to_number(p[0..3].to_vec()) % 17 == 0 && utils::digits_to_number(p[1..4].to_vec()) % 13 == 0 && utils::digits_to_number(p[2..5].to_vec()) % 11 == 0 && utils::digits_to_number(p[3..6].to_vec()) % 7 == 0 && utils::digits_to_number(p[4..7].to_vec()) % 5 == 0 && utils::digits_to_number(p[5..8].to_vec()) % 3 == 0 && utils::digits_to_number(p[6..9].to_vec()) % 2 == 0 {
-            sum += utils::digits_to_number(p);
+        if (p % 1000) % 17 == 0 && (p / 10 % 1000) % 13 == 0 && (p / 100 % 1000) % 11 == 0 && (p / 1000 % 1000) % 7 == 0 && (p / 10000 % 1000) % 5 == 0 && (p / 100000 % 1000) % 3 == 0 && (p / 1000000 % 1000) % 2 == 0 {
+            sum += p;
         }
     }
     sum
