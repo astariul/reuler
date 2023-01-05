@@ -502,6 +502,27 @@ where
     permutations
 }
 
+/// Convert a list of digits into a number.
+///
+/// # Notes
+/// The number created uses the digits in reverse order. This is a feature, not
+/// a bug, to be able to use this function together with the function
+/// `digits_of()` (which returns the digits in reverse order).
+///
+/// # Examples
+/// ```
+/// assert_eq!(reuler::utils::digits_to_number(vec![1, 2, 3]), 321);
+/// ```
+pub fn digits_to_number(digits: Vec<usize>) -> usize {
+    let mut number = 0;
+    let mut m = 1;
+    for d in digits.iter() {
+        number += d * m;
+        m *= 10;
+    }
+    number
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -569,5 +590,10 @@ mod tests {
     #[test]
     fn test_permutation_single_element() {
         assert_eq!(permutations_of(vec![1]), vec![vec![1]]);
+    }
+
+    #[test]
+    fn test_empty_digits() {
+        assert_eq!(digits_to_number(Vec::new()), 0);
     }
 }
