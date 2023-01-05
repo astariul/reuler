@@ -24,12 +24,7 @@ fn largest_pandigital_prime() -> usize {
         }
 
         // Reconstruct the number from its digit
-        let mut number = 0;
-        let mut m = 1;
-        for d in p.iter() {
-            number += d * m;
-            m *= 10;
-        }
+        let number = utils::digits_to_number(p);
 
         // Check if it fits what we are looking for
         if utils::is_prime(number) && number > largest_number {
@@ -50,12 +45,7 @@ fn largest_pandigital_prime() -> usize {
         }
 
         // Reconstruct the number from its digit
-        let mut number = 0;
-        let mut m = 1;
-        for d in p.iter() {
-            number += d * m;
-            m *= 10;
-        }
+        let number = utils::digits_to_number(p);
 
         // Check if it fits what we are looking for
         if utils::is_prime(number) && number > largest_number {
