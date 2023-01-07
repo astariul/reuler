@@ -42,7 +42,7 @@ fn next_triangular_pentagonal_hexagonal(n: usize) -> usize {
         if is_pentagonal(tn) && is_hexagonal(tn) {
             return tn;
         }
-        
+
         n += 1;
     }
 }
