@@ -32,7 +32,7 @@ fn minimal_pentagon_number() -> usize {
     }
 }
 
-/// Solve the problem #43 and return the solution.
+/// Solve the problem #44 and return the solution.
 pub fn solve() -> String {
     minimal_pentagon_number().to_string()
 }
