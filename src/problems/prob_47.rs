@@ -3,12 +3,9 @@ use std::collections::HashSet;
 
 /// Find the first n consecutive numbers that have n distinct prime factors.
 fn distinct_prime_factors(n: usize) -> usize {
-    let mut previous_primes = vec![2];
-    let mut x = 3;
+    let mut previous_primes = Vec::new();
+    let mut x = 2;
     let mut prime_factors = HashMap::new();
-    let mut factors_of_2 = HashSet::new();
-    factors_of_2.insert(2);
-    prime_factors.insert(2, factors_of_2);
     prime_factors.insert(1, HashSet::new());
 
     loop {
