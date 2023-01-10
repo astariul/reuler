@@ -1,5 +1,5 @@
 /// Find the smallest odd composite number that cannot be written as the sum of
-// a prime and twice a square.
+/// a prime and twice a square.
 fn goldbach_conjecture_counter_example() -> usize {
     let mut previous_primes = vec![2, 3, 5, 7];
     let mut x = 7;
