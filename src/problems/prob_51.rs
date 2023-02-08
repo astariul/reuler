@@ -21,23 +21,27 @@ fn arrangements_of_index(indexes: Vec<usize>, n_index: usize) -> Vec<Vec<usize>>
     arrangements
 }
 
-fn create_possible_replacements(x: usize, arrangements_cache: HashMap<usize, Vec<Vec<usize>>>) -> Vec<Vec<usize>> {
+fn create_possible_replacements(x: usize, arrangements_cache: &mut HashMap<usize, Vec<Vec<usize>>>) -> Vec<Vec<usize>> {
     let original_digits = utils::digits_of(x);
 
-    let replacements = Vec::new();
+    let mut replacements = Vec::new();
     for i in 1..original_digits.len() {
         // Create the replacements where i digits are replaced
         // First, get the possible arrangements for this number of digits
         let arrangements = arrangements_cache.entry(i).or_insert(arrangements_of_index((0..original_digits.len()).collect(), i));
         
-        for arr in arrangements {
+        for arr in arrangements.iter() {
             let mut curr_replacement = Vec::new();
+
             // For each arrangement, replace with all possible digits from 0 to 9
-            for d in 0..9 {
+            // But if we change the first digit, don't try 0 (not valid)
+            let start_digit = if arr.contains(&(original_digits.len() - 1)) { 1 } else { 0 };
+            for d in start_digit..9 {
                 let mut digits = original_digits.clone();
-                for digit_to_replace in arr {
+                for digit_to_replace in arr.iter() {
                     digits[*digit_to_replace] = d;
                 }
+                println!("->{}", utils::digits_to_number(digits.clone()));
                 curr_replacement.push(utils::digits_to_number(digits));
             }
             replacements.push(curr_replacement);
@@ -55,20 +59,22 @@ fn smallest_n_prime_replacement(n: usize) -> usize {
 
     let mut arrangements_cache = HashMap::new();
     for p in utils::Primes::new() {
-        for replacement in create_possible_replacements(p, arrangements_cache) {
+        for replacement in create_possible_replacements(p, &mut arrangements_cache) {
+            println!("\nReplacements {p}:");
             let mut n_primes = 0;
-            for r in replacement {
+            let mut min_r = usize::MAX;
+            for &r in replacement.iter() {
                 if utils::is_prime(r) {
                     n_primes += 1;
+                    if r < min_r {
+                        min_r = r;
+                    }
                 }
             }
 
             if n_primes == n {
-                let mut min_r = replacement[0];
-                for r in replacement {
-                    if r < min_r {
-                        min_r = r;
-                    }
+                for &r in replacement.iter() {
+                    println!("{r}");
                 }
                 return min_r;
             }
