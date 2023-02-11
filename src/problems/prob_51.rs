@@ -17,7 +17,11 @@ fn replace_digit_i(digits: &Vec<usize>, i: usize) -> Vec<usize> {
     let mut family = Vec::new();
     let start = if digits[digits.len() - 1] == i { 1 } else { 0 };
     for d in start..10 {
-        let member = digits.clone().into_iter().map(|m| if m == i { d } else { m }).collect();
+        let member = digits
+            .clone()
+            .into_iter()
+            .map(|m| if m == i { d } else { m })
+            .collect();
         family.push(utils::digits_to_number(member));
     }
     family
