@@ -78,7 +78,7 @@ fn smallest_n_prime_replacement(n: usize) -> usize {
 
         // Replace repeated digits
         let mut families = replace_repeated_digits(&p_digits);
-        for mut family in families.into_iter() {
+        for family in families.iter_mut() {
             family.retain(|&m| utils::is_prime(m));
             if family.len() == n {
                 return *family.iter().min().unwrap();
