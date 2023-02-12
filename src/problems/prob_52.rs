@@ -33,8 +33,10 @@ fn smallest_n_multiples_same_digits(n: usize) -> usize {
     let mut x = 1;
     loop {
         let digits = utils::digits_of(x);
-        if mutliples.iter().all(|&m| has_same_digits(&digits, &utils::digits_of(m * x))) {
-
+        if mutliples
+            .iter()
+            .all(|&m| has_same_digits(&digits, &utils::digits_of(m * x)))
+        {
             break;
         }
         x += 1;
