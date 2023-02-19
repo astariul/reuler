@@ -1,37 +1,43 @@
-use crate::utils;
 use std::collections::HashMap;
 
-struct CachedFactorial {
-    cache: HashMap<usize, utils::BigInt>,
+struct CachedLimitedCombinations {
+    limit: usize,
+    cache: HashMap<(usize, usize), usize>,
 }
 
-impl CachedFactorial {
-    fn new() -> Self {
-        let mut cache = HashMap::new();
-        cache.insert(0, utils::BigInt::from(1));
-        Self { cache }
-    }
-
-    fn of(&self, n: usize) -> utils::BigInt {
-        if !self.cache.contains_key(&n) {
-            let mut f = self.of(n - 1);
-            f *= n;
-            self.cache.insert(n, f);
+impl CachedLimitedCombinations {
+    fn new(limit: usize) -> Self {
+        let cache = HashMap::new();
+        Self { 
+            limit: limit,
+            cache: cache,
         }
-        self.cache[&n]
+    }
+
+    fn of(&mut self, n: usize, r: usize) -> usize {
+        if r == 0 || r == n {
+            return 1;
+        }
+        if !self.cache.contains_key(&(n, r)) {
+            let mut c = self.of(n - 1, r - 1) + self.of(n - 1, r);
+            if c > self.limit {
+                c = self.limit + 1
+            }
+            self.cache.insert((n, r), c);
+        }
+        self.cache[&(n, r)]
     }
 }
 
-/// Find the number of combinatorics selections where (n r) has more than
-/// n_digits digits with any r, and 1 <= n <= max_n
-fn combinatorics_selections_above(max_n: usize, n_digits: usize) -> usize {
-    let factorial = CachedFactorial::new();
+/// Find the number of combinatorics selections where (n r) > above_x with any
+/// r, and 1 <= n <= max_n.
+fn combinatorics_selections_above(max_n: usize, above_x: usize) -> usize {
+    let mut combinations = CachedLimitedCombinations::new(above_x);
 
     let mut n_exceeding_value = 0;
     for n in 1..max_n + 1 {
         for r in 1..n + 1 {
-            let x = factorial.of(n) / (factorial.of(r) * factorial.of(n - r));
-            if x.digits.len() > n_digits {
+            if combinations.of(n, r) > above_x {
                 n_exceeding_value += 1;
             }
         }
@@ -41,7 +47,7 @@ fn combinatorics_selections_above(max_n: usize, n_digits: usize) -> usize {
 
 /// Solve the problem #53 and return the solution.
 pub fn solve() -> String {
-    combinatorics_selections_above(100, 6).to_string()
+    combinatorics_selections_above(100, 1000000).to_string()
 }
 
 #[cfg(test)]
@@ -50,6 +56,18 @@ mod tests {
 
     #[test]
     fn test_given_example() {
-        assert_eq!(combinatorics_selections_above(23, 6), 4);
+        assert_eq!(combinatorics_selections_above(23, 1000000), 4);
+    }
+
+    #[test]
+    fn test_combinations_no_limit() {
+        let mut combinations = CachedLimitedCombinations::new(1000);
+        assert_eq!(combinations.of(5, 3), 10);
+    }
+
+    #[test]
+    fn test_combinations_with_limit() {
+        let mut combinations = CachedLimitedCombinations::new(5);
+        assert_eq!(combinations.of(5, 3), 6);
     }
 }
