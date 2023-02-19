@@ -11,7 +11,7 @@ fn cached_factorial(n: u128, cache: &mut HashMap<u128, u128>) -> u128 {
 
 /// Find the number of combinatorics selections where (n r) > above_x with
 /// any r, and 1 <= n <= max_n
-fn combinatorics_selections_above(max_n: usize, above_x: u128) -> usize {
+fn combinatorics_selections_above(max_n: u128, above_x: u128) -> usize {
     let mut cache = HashMap::new();
 
     let mut n_exceeding_value = 0;
@@ -39,6 +39,6 @@ mod tests {
 
     #[test]
     fn test_given_example() {
-        assert_eq!(combinatorics_selections_above(23, 1000000), 1);
+        assert_eq!(combinatorics_selections_above(23, 1000000), 4);
     }
 }
