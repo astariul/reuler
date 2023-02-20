@@ -8,7 +8,7 @@ struct CachedLimitedCombinations {
 impl CachedLimitedCombinations {
     fn new(limit: usize) -> Self {
         let cache = HashMap::new();
-        Self { 
+        Self {
             limit: limit,
             cache: cache,
         }
