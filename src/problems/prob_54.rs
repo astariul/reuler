@@ -8,6 +8,7 @@ enum Rank {
 }
 
 /// Possible suits of a card.
+#[derive(Clone, Copy, PartialEq)]
 enum Suit {
     Club,
     Diamond,
@@ -56,6 +57,21 @@ impl Card {
     }
 }
 
+/// Contains the different scores for each type of hand.
+mod Score {
+    const BASE: usize = 100;
+    const HIGH_CARD: usize = 0 * BASE;
+    const ONE_PAIR: usize = 1 * BASE;
+    const TWO_PAIR: usize = 2 * BASE;
+    const THREE_OF_A_KIND: usize = 3 * BASE;
+    const STRAIGHT: usize = 4 * BASE;
+    const FLUSH: usize = 5 * BASE;
+    const FULL_HOUSE: usize = 6 * BASE;
+    const FOUR_OF_A_KIND: usize = 7 * BASE;
+    const STRAIGHT_FLUSH: usize = 8 * BASE;
+    const ROYAL_FLUSH: usize = 9 * BASE;
+}
+
 /// Represents a hand, which is several cards (5 in this problem).
 struct Hand {
     cards: Vec<Card>,
@@ -64,20 +80,33 @@ struct Hand {
 impl Hand {
     /// Constructor for the Hand.
     pub fn new(cards: Vec<Card>) -> Self {
+        if cards.len() == 0 {
+            panic!("A hand cannot be empty !");
+        }
         Self { cards }
     }
 
     /// Compute the value of the hand.
     /// It's in this function that we compute the various ranks of a Poker hand
     /// (Full House, Royal Flush, etc...). Ranks are given value in the hundred
-    /// scale, and then the value of each card are used for solving ties.
-    pub fn value(&self) -> usize {
+    /// scale, and then the value of each card are used for solving ties of
+    /// same rank.
+    /// A vector of values is returned. It should be iterated while comparing,
+    /// and only if the i-th value is a tie, we should look into the i+1-th
+    /// value.
+    pub fn value(&self) -> Vec<usize> {
         // TODO
         let mut total_value = 0;
         for card in self.cards.iter() {
             total_value += card.value();
         }
-        total_value
+        vec![total_value]
+    }
+
+    /// Return `true` if all card of the hand belong to the same suit.
+    fn is_same_suit(&self) -> bool {
+        let first_suit = self.cards[0].suit;
+        self.cards.iter().all(|c| c.suit == first_suit)
     }
 }
 
@@ -170,5 +199,28 @@ mod tests {
         assert!(Card::new("JH").value() < Card::new("QH").value());
         assert!(Card::new("QH").value() < Card::new("KH").value());
         assert!(Card::new("KH").value() < Card::new("AH").value());
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_empty_hand() {
+        let h = Hand::new(Vec::new());
+    }
+
+    #[test]
+    fn test_hand_is_same_suit() {
+        let h = Hand::new(vec![
+            Card::new("2H"),
+            Card::new("4H"),
+            Card::new("JH"),
+        ]);
+        assert!(h.is_same_suit());
+
+        let h = Hand::new(vec![
+            Card::new("2H"),
+            Card::new("4S"),
+            Card::new("JH"),
+        ]);
+        assert!(!h.is_same_suit());
     }
 }
