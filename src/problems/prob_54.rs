@@ -1,3 +1,4 @@
+/// Possible ranks of a card.
 enum Rank {
     Pip(usize),
     Jack,
@@ -6,6 +7,7 @@ enum Rank {
     Ace,
 }
 
+/// Possible suits of a card.
 enum Suit {
     Club,
     Diamond,
@@ -13,12 +15,14 @@ enum Suit {
     Spade,
 }
 
+/// Represents a single card, with a rank, a suit, and an associated value. 
 struct Card {
     rank: Rank,
     suit: Suit,
 }
 
 impl Card {
+    /// Parse the given card descriptor and create the associated card.
     pub fn new(c: &str) -> Self {
         assert_eq!(c.len(), 2);
         let rank = match c.chars().nth(0).unwrap() {
@@ -40,6 +44,7 @@ impl Card {
         Self { rank, suit }
     }
 
+    /// Compute the value of this card.
     pub fn value(&self) -> usize {
         match self.rank {
             Rank::Pip(x) => x,
@@ -51,15 +56,21 @@ impl Card {
     }
 }
 
+/// Represents a hand, which is several cards (5 in this problem).
 struct Hand {
     cards: Vec<Card>,
 }
 
 impl Hand {
+    /// Constructor for the Hand.
     pub fn new(cards: Vec<Card>) -> Self {
         Self { cards }
     }
 
+    /// Compute the value of the hand.
+    /// It's in this function that we compute the various ranks of a Poker hand
+    /// (Full House, Royal Flush, etc...). Ranks are given value in the hundred
+    /// scale, and then the value of each card are used for solving ties.
     pub fn value(&self) -> usize {
         // TODO
         let mut total_value = 0;
