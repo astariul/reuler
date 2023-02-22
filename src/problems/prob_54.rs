@@ -21,21 +21,21 @@ struct Card {
 impl Card {
     pub fn new(c: &str) -> Self {
         assert_eq!(c.len(), 2);
-        let rank = match c[0] {
-            '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => Rank::Pip(c[0].to_digit(10)),
+        let rank = match c.chars().nth(0).unwrap() {
+            '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => Rank::Pip(c.chars().nth(0).unwrap().to_digit(10).unwrap().try_into().unwrap()),
             'T' => Rank::Pip(10),
             'J' => Rank::Jack,
             'Q' => Rank::Queen,
             'K' => Rank::King,
             'A' => Rank::Ace,
-            _ => panic!("Unknown card rank : {}", c[1]),
+            _ => panic!("Unknown card rank : {}", c.chars().nth(0).unwrap()),
         };
-        let suit = match c[1] {
+        let suit = match c.chars().nth(1).unwrap() {
             'C' => Suit::Club,
             'D' => Suit::Diamond,
             'H' => Suit::Heart,
             'S' => Suit::Spade,
-            _ => panic!("Unknown card suit : {}", c[1]),
+            _ => panic!("Unknown card suit : {}", c.chars().nth(1).unwrap()),
         };
         Self { rank, suit }
     }
@@ -56,14 +56,14 @@ struct Hand {
 }
 
 impl Hand {
-    pub fn new(cards: Vec<Cards>) -> Self {
+    pub fn new(cards: Vec<Card>) -> Self {
         Self { cards }
     }
 
     pub fn value(&self) -> usize {
         // TODO
-        let total_value = 0;
-        for card in self.cards {
+        let mut total_value = 0;
+        for card in self.cards.iter() {
             total_value += card.value();
         }
         total_value
