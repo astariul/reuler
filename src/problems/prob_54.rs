@@ -8,7 +8,7 @@ enum Rank {
 }
 
 /// Possible suits of a card.
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 enum Suit {
     Club,
     Diamond,
@@ -58,18 +58,18 @@ impl Card {
 }
 
 /// Contains the different scores for each type of hand.
-mod Score {
-    const BASE: usize = 100;
-    const HIGH_CARD: usize = 0 * BASE;
-    const ONE_PAIR: usize = 1 * BASE;
-    const TWO_PAIR: usize = 2 * BASE;
-    const THREE_OF_A_KIND: usize = 3 * BASE;
-    const STRAIGHT: usize = 4 * BASE;
-    const FLUSH: usize = 5 * BASE;
-    const FULL_HOUSE: usize = 6 * BASE;
-    const FOUR_OF_A_KIND: usize = 7 * BASE;
-    const STRAIGHT_FLUSH: usize = 8 * BASE;
-    const ROYAL_FLUSH: usize = 9 * BASE;
+mod score {
+    const _BASE: usize = 100;
+    const HIGH_CARD: usize = 0 * _BASE;
+    const ONE_PAIR: usize = 1 * _BASE;
+    const TWO_PAIR: usize = 2 * _BASE;
+    const THREE_OF_A_KIND: usize = 3 * _BASE;
+    const STRAIGHT: usize = 4 * _BASE;
+    const FLUSH: usize = 5 * _BASE;
+    const FULL_HOUSE: usize = 6 * _BASE;
+    const FOUR_OF_A_KIND: usize = 7 * _BASE;
+    const STRAIGHT_FLUSH: usize = 8 * _BASE;
+    const ROYAL_FLUSH: usize = 9 * _BASE;
 }
 
 /// Represents a hand, which is several cards (5 in this problem).
@@ -79,10 +79,11 @@ struct Hand {
 
 impl Hand {
     /// Constructor for the Hand.
-    pub fn new(cards: Vec<Card>) -> Self {
+    pub fn new(mut cards: Vec<Card>) -> Self {
         if cards.len() == 0 {
             panic!("A hand cannot be empty !");
         }
+        cards.sort_by_key(|c| c.value());
         Self { cards }
     }
 
@@ -204,7 +205,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_empty_hand() {
-        let h = Hand::new(Vec::new());
+        Hand::new(Vec::new());
     }
 
     #[test]
@@ -222,5 +223,19 @@ mod tests {
             Card::new("JH"),
         ]);
         assert!(!h.is_same_suit());
+    }
+
+    #[test]
+    fn test_hand_ordered() {
+        let h = Hand::new(vec![
+            Card::new("JH"),
+            Card::new("2S"),
+            Card::new("AD"),
+            Card::new("4C"),
+        ]);
+        assert_eq!(h.cards[0].suit, Suit::Spade);
+        assert_eq!(h.cards[1].suit, Suit::Club);
+        assert_eq!(h.cards[2].suit, Suit::Heart);
+        assert_eq!(h.cards[3].suit, Suit::Diamond);
     }
 }
