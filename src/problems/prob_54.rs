@@ -105,7 +105,7 @@ impl Hand {
         Self { cards }
     }
 
-    /// Compute the value of the hand.
+    /// Compute the values of the hand.
     /// It's in this function that we compute the various ranks of a Poker hand
     /// (Full House, Royal Flush, etc...). Ranks are given value in the hundred
     /// scale, and then the value of each card are used for solving ties of
@@ -113,7 +113,7 @@ impl Hand {
     /// A vector of values is returned. It should be iterated while comparing,
     /// and only if the i-th value is a tie, we should look into the i+1-th
     /// value.
-    pub fn value(&self) -> Vec<usize> {
+    pub fn values(&self) -> Vec<usize> {
         // Royal Flush
         if self.is_same_suit() && self.is_consecutive() && self.cards.len() == 5 && self.cards[0].rank == Rank::Pip(10) {
             // All cards are used and all Royal flushes are equal, so no need to update the score for tie-solving
@@ -143,7 +143,8 @@ impl Hand {
                 value_groups.push(vec![c.clone()]);
             }
         }
-        value_groups.sort_by_key(|g| g.len());
+        // Order groups based on how many cards are in the group and the value of the group
+        value_groups.sort_by_key(|g| std::cmp::Reverse(g.len() * 100 + g[0].value()));
 
         // Four of a kind
         if value_groups[0].len() == 4 {
@@ -250,11 +251,18 @@ fn n_win_player_1(hands: &str) -> usize {
         let p2_cards = cards.split_off(cards.len() / 2);
         let p1_cards = cards;
 
-        let p1_hand = Hand::new(p1_cards);
-        let p2_hand = Hand::new(p2_cards);
+        let p1_hand_values = Hand::new(p1_cards).values();
+        let p2_hand_values = Hand::new(p2_cards).values();
 
-        if p1_hand.value() > p2_hand.value() {
-            p1_n_wins += 1;
+        for i in 0..p1_hand_values.len() {
+            if p1_hand_values[i] > p2_hand_values[i] {
+                p1_n_wins += 1;
+            }
+
+            // Only keep going in this loop if there is a tie
+            if p1_hand_values[i] != p2_hand_values[i] {
+                break;
+            }
         }
     }
     p1_n_wins
@@ -389,5 +397,146 @@ mod tests {
             Card::new("QS"),
         ]);
         assert!(h.is_consecutive());
+    }
+
+    #[test]
+    fn test_score_royal_flush() {
+        let values = Hand::new(vec![
+            Card::new("TH"),
+            Card::new("JH"),
+            Card::new("QH"),
+            Card::new("KH"),
+            Card::new("AH"),
+        ]).values();
+        assert_eq!(values.len(), 1);
+        assert_eq!(values[0], score::ROYAL_FLUSH);
+    }
+
+    #[test]
+    fn test_score_straight_flush() {
+        let values = Hand::new(vec![
+            Card::new("7H"),
+            Card::new("8H"),
+            Card::new("9H"),
+            Card::new("TH"),
+            Card::new("JH"),
+        ]).values();
+        assert_eq!(values.len(), 1);
+        assert!(values[0] > score::STRAIGHT_FLUSH);
+    }
+
+    #[test]
+    fn test_score_four_of_a_kind() {
+        let values = Hand::new(vec![
+            Card::new("4H"),
+            Card::new("6C"),
+            Card::new("6S"),
+            Card::new("6D"),
+            Card::new("6H"),
+        ]).values();
+        assert_eq!(values.len(), 2);
+        assert!(values[0] > score::FOUR_OF_A_KIND);
+        assert_eq!(values[1], 4);
+    }
+
+    #[test]
+    fn test_score_full_house() {
+        let values = Hand::new(vec![
+            Card::new("2H"),
+            Card::new("2S"),
+            Card::new("2D"),
+            Card::new("6D"),
+            Card::new("6H"),
+        ]).values();
+        assert_eq!(values.len(), 1);
+        assert!(values[0] > score::FULL_HOUSE);
+    }
+
+    #[test]
+    fn test_score_flush() {
+        let values = Hand::new(vec![
+            Card::new("2H"),
+            Card::new("4H"),
+            Card::new("6H"),
+            Card::new("8H"),
+            Card::new("QH"),
+        ]).values();
+        assert_eq!(values.len(), 1);
+        assert!(values[0] > score::FLUSH);
+    }
+
+    #[test]
+    fn test_score_straight() {
+        let values = Hand::new(vec![
+            Card::new("2H"),
+            Card::new("3S"),
+            Card::new("4D"),
+            Card::new("5H"),
+            Card::new("6H"),
+        ]).values();
+        assert_eq!(values.len(), 1);
+        assert!(values[0] > score::STRAIGHT);
+    }
+
+    #[test]
+    fn test_score_three_of_a_kind() {
+        let values = Hand::new(vec![
+            Card::new("2H"),
+            Card::new("3S"),
+            Card::new("6S"),
+            Card::new("6D"),
+            Card::new("6H"),
+        ]).values();
+        assert_eq!(values.len(), 3);
+        assert!(values[0] > score::THREE_OF_A_KIND);
+        assert_eq!(values[1], 3);
+        assert_eq!(values[2], 2);
+    }
+
+    #[test]
+    fn test_score_two_pairs() {
+        let values = Hand::new(vec![
+            Card::new("8H"),
+            Card::new("3S"),
+            Card::new("8S"),
+            Card::new("6D"),
+            Card::new("6H"),
+        ]).values();
+        assert_eq!(values.len(), 2);
+        assert!(values[0] > score::TWO_PAIRS);
+        assert_eq!(values[1], 3);
+    }
+
+    #[test]
+    fn test_score_pair() {
+        let values = Hand::new(vec![
+            Card::new("8H"),
+            Card::new("3S"),
+            Card::new("8S"),
+            Card::new("9D"),
+            Card::new("KH"),
+        ]).values();
+        assert_eq!(values.len(), 4);
+        assert!(values[0] > score::PAIR);
+        assert_eq!(values[1], 13);
+        assert_eq!(values[2], 9);
+        assert_eq!(values[3], 3);
+    }
+
+    #[test]
+    fn test_score_high_card() {
+        let values = Hand::new(vec![
+            Card::new("8H"),
+            Card::new("3S"),
+            Card::new("5S"),
+            Card::new("9D"),
+            Card::new("KH"),
+        ]).values();
+        assert_eq!(values.len(), 5);
+        assert_eq!(values[0], 13);
+        assert_eq!(values[1], 9);
+        assert_eq!(values[2], 8);
+        assert_eq!(values[3], 5);
+        assert_eq!(values[4], 3);
     }
 }
