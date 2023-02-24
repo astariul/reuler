@@ -47,6 +47,7 @@ pub mod prob_50;
 pub mod prob_51;
 pub mod prob_52;
 pub mod prob_53;
+pub mod prob_54;
 pub mod prob_6;
 pub mod prob_67;
 pub mod prob_7;
