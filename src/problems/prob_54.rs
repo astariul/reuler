@@ -57,6 +57,23 @@ impl Card {
     }
 }
 
+impl std::fmt::Display for Card {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{}{}", match self.rank {
+            Rank::Pip(r) => r.to_string(),
+            Rank::Jack => "J".to_string(),
+            Rank::Queen => "Q".to_string(),
+            Rank::King => "K".to_string(),
+            Rank::Ace => "A".to_string(),
+        }, match self.suit {
+            Suit::Club => "♧",
+            Suit::Diamond => "♢",
+            Suit::Heart => "♡",
+            Suit::Spade => "♤",
+        })
+    }
+}
+
 /// Contains the different scores for each type of hand.
 mod score {
     const _BASE: usize = 100;
@@ -104,10 +121,20 @@ impl Hand {
         vec![total_value]
     }
 
-    /// Return `true` if all card of the hand belong to the same suit.
+    /// Return `true` if all cards of the hand belong to the same suit.
     fn is_same_suit(&self) -> bool {
         let first_suit = self.cards[0].suit;
         self.cards.iter().all(|c| c.suit == first_suit)
+    }
+
+    /// Return `true` if the cards of the hands are consecutive.
+    fn is_consecutive(&self) -> bool {
+        for i in 1..self.cards.len() {
+            if self.cards[i].value() != self.cards[i - 1].value() + 1 {
+                return false;
+            }
+        }
+        true
     }
 }
 
@@ -237,5 +264,30 @@ mod tests {
         assert_eq!(h.cards[1].suit, Suit::Club);
         assert_eq!(h.cards[2].suit, Suit::Heart);
         assert_eq!(h.cards[3].suit, Suit::Diamond);
+    }
+
+    #[test]
+    fn test_hand_is_consecutive() {
+        let h = Hand::new(vec![
+            Card::new("2H"),
+            Card::new("4S"),
+            Card::new("JH"),
+        ]);
+        assert!(!h.is_consecutive());
+
+        let h = Hand::new(vec![
+            Card::new("2H"),
+            Card::new("3S"),
+            Card::new("4H"),
+        ]);
+        assert!(h.is_consecutive());
+
+        let h = Hand::new(vec![
+            Card::new("9H"),
+            Card::new("TS"),
+            Card::new("JH"),
+            Card::new("QS"),
+        ]);
+        assert!(h.is_consecutive());
     }
 }
