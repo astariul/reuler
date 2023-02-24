@@ -1,4 +1,5 @@
 /// Possible ranks of a card.
+#[derive(Clone, Copy, PartialEq)]
 enum Rank {
     Pip(usize),
     Jack,
@@ -17,6 +18,7 @@ enum Suit {
 }
 
 /// Represents a single card, with a rank, a suit, and an associated value. 
+#[derive(Clone, Copy)]
 struct Card {
     rank: Rank,
     suit: Suit,
@@ -77,16 +79,15 @@ impl std::fmt::Display for Card {
 /// Contains the different scores for each type of hand.
 mod score {
     const _BASE: usize = 100;
-    const HIGH_CARD: usize = 0 * _BASE;
-    const ONE_PAIR: usize = 1 * _BASE;
-    const TWO_PAIR: usize = 2 * _BASE;
-    const THREE_OF_A_KIND: usize = 3 * _BASE;
-    const STRAIGHT: usize = 4 * _BASE;
-    const FLUSH: usize = 5 * _BASE;
-    const FULL_HOUSE: usize = 6 * _BASE;
-    const FOUR_OF_A_KIND: usize = 7 * _BASE;
-    const STRAIGHT_FLUSH: usize = 8 * _BASE;
-    const ROYAL_FLUSH: usize = 9 * _BASE;
+    pub const PAIR: usize = 1 * _BASE;
+    pub const TWO_PAIRS: usize = 2 * _BASE;
+    pub const THREE_OF_A_KIND: usize = 3 * _BASE;
+    pub const STRAIGHT: usize = 4 * _BASE;
+    pub const FLUSH: usize = 5 * _BASE;
+    pub const FULL_HOUSE: usize = 6 * _BASE;
+    pub const FOUR_OF_A_KIND: usize = 7 * _BASE;
+    pub const STRAIGHT_FLUSH: usize = 8 * _BASE;
+    pub const ROYAL_FLUSH: usize = 9 * _BASE;
 }
 
 /// Represents a hand, which is several cards (5 in this problem).
@@ -113,12 +114,111 @@ impl Hand {
     /// and only if the i-th value is a tie, we should look into the i+1-th
     /// value.
     pub fn value(&self) -> Vec<usize> {
-        // TODO
-        let mut total_value = 0;
-        for card in self.cards.iter() {
-            total_value += card.value();
+        // Royal Flush
+        if self.is_same_suit() && self.is_consecutive() && self.cards.len() == 5 && self.cards[0].rank == Rank::Pip(10) {
+            // All cards are used and all Royal flushes are equal, so no need to update the score for tie-solving
+            return vec![score::ROYAL_FLUSH];
         }
-        vec![total_value]
+        
+        // Straight Flush
+        if self.is_same_suit() && self.is_consecutive() {
+            // All cards are used so there is only one value
+            // But the score of the straight flush should be updated with the value of the highest card for tie-solving 
+            return vec![score::STRAIGHT_FLUSH + self.cards[self.cards.len() - 1].value()];
+        }
+
+        // From here we need to count the cards with the same value
+        // Group the cards by value
+        let mut value_groups: Vec<Vec<Card>> = Vec::new();
+        for c in self.cards.iter() {
+            let mut added_to_existing_group = false;
+            for group in value_groups.iter_mut() {
+                if group[0].value() == c.value() {
+                    group.push(c.clone());
+                    added_to_existing_group = true;
+                }
+            }
+
+            if !added_to_existing_group {
+                value_groups.push(vec![c.clone()]);
+            }
+        }
+        value_groups.sort_by_key(|g| g.len());
+
+        // Four of a kind
+        if value_groups[0].len() == 4 {
+            // Tie-solving for the quadruplet : value of the group
+            let mut values = vec![score::FOUR_OF_A_KIND + value_groups[0][0].value()];
+
+            // For the other groups, just the value of the group
+            for i in 1..value_groups.len() {
+                values.push(value_groups[i][0].value());
+            }
+            return values;
+        }
+
+        // Full house
+        if value_groups.len() >= 2 && value_groups[0].len() == 3 && value_groups[1].len() == 2 {
+            // Tie-solving for the triplet & pair : value of the groups
+            let mut values = vec![score::FULL_HOUSE + value_groups[0][0].value() + value_groups[1][0].value()];
+
+            // For the other groups, just the value of the group
+            for i in 2..value_groups.len() {
+                values.push(value_groups[i][0].value());
+            }
+            return values;
+        }
+
+        // Flush
+        if self.is_same_suit() {
+            // All cards are used so there is only one value
+            return vec![score::FLUSH + self.cards[self.cards.len() - 1].value()];
+        }
+
+        // Straight
+        if self.is_consecutive() {
+            // All cards are used so there is only one value
+            return vec![score::STRAIGHT + self.cards[self.cards.len() - 1].value()];
+        }
+
+        // Three of a kind
+        if value_groups[0].len() == 3 {
+            // Tie-solving for the triplet : value of the group
+            let mut values = vec![score::THREE_OF_A_KIND + value_groups[0][0].value()];
+
+            // For the other groups, just the value of the group
+            for i in 1..value_groups.len() {
+                values.push(value_groups[i][0].value());
+            }
+            return values;
+        }
+
+        // Two pairs
+        if value_groups.len() >= 2 && value_groups[0].len() == 2 && value_groups[1].len() == 2 {
+            // Tie-solving for the double pair : value of the groups
+            let mut values = vec![score::TWO_PAIRS + value_groups[0][0].value() + value_groups[1][0].value()];
+
+            // For the other groups, just the value of the group
+            for i in 2..value_groups.len() {
+                values.push(value_groups[i][0].value());
+            }
+            return values;
+        }
+
+        // Pair
+        if value_groups[0].len() == 2 {
+            // Tie-solving for the pair : value of the groups
+            let mut values = vec![score::PAIR + value_groups[0][0].value()];
+
+            // For the other groups, just the value of the group
+            for i in 1..value_groups.len() {
+                values.push(value_groups[i][0].value());
+            }
+            return values;
+        }
+
+        // Highest card
+        self.cards.iter().rev().map(|c| c.value()).collect()
     }
 
     /// Return `true` if all cards of the hand belong to the same suit.
