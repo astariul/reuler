@@ -78,7 +78,7 @@ impl std::fmt::Display for Card {
 
 /// Contains the different scores for each type of hand.
 mod score {
-    const _BASE: usize = 100;
+    const _BASE: usize = 1000;
     pub const PAIR: usize = 1 * _BASE;
     pub const TWO_PAIRS: usize = 2 * _BASE;
     pub const THREE_OF_A_KIND: usize = 3 * _BASE;
@@ -107,9 +107,9 @@ impl Hand {
 
     /// Compute the values of the hand.
     /// It's in this function that we compute the various ranks of a Poker hand
-    /// (Full House, Royal Flush, etc...). Ranks are given value in the hundred
-    /// scale, and then the value of each card are used for solving ties of
-    /// same rank.
+    /// (Full House, Royal Flush, etc...). Ranks are given value in the
+    /// thousand scale, and then the value of each card are used for solving
+    /// ties of same rank.
     /// A vector of values is returned. It should be iterated while comparing,
     /// and only if the i-th value is a tie, we should look into the i+1-th
     /// value.
@@ -161,7 +161,8 @@ impl Hand {
         // Full house
         if value_groups.len() >= 2 && value_groups[0].len() == 3 && value_groups[1].len() == 2 {
             // Tie-solving for the triplet & pair : value of the groups
-            let mut values = vec![score::FULL_HOUSE + value_groups[0][0].value() + value_groups[1][0].value()];
+            // The value of the triplet is more important though, hence the weighting
+            let mut values = vec![score::FULL_HOUSE + value_groups[0][0].value() * 10 + value_groups[1][0].value()];
 
             // For the other groups, just the value of the group
             for i in 2..value_groups.len() {
