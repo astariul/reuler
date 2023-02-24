@@ -17,7 +17,7 @@ enum Suit {
     Spade,
 }
 
-/// Represents a single card, with a rank, a suit, and an associated value. 
+/// Represents a single card, with a rank, a suit, and an associated value.
 #[derive(Clone, Copy)]
 struct Card {
     rank: Rank,
@@ -29,7 +29,15 @@ impl Card {
     pub fn new(c: &str) -> Self {
         assert_eq!(c.len(), 2);
         let rank = match c.chars().nth(0).unwrap() {
-            '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => Rank::Pip(c.chars().nth(0).unwrap().to_digit(10).unwrap().try_into().unwrap()),
+            '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => Rank::Pip(
+                c.chars()
+                    .nth(0)
+                    .unwrap()
+                    .to_digit(10)
+                    .unwrap()
+                    .try_into()
+                    .unwrap(),
+            ),
             'T' => Rank::Pip(10),
             'J' => Rank::Jack,
             'Q' => Rank::Queen,
@@ -61,18 +69,23 @@ impl Card {
 
 impl std::fmt::Display for Card {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}{}", match self.rank {
-            Rank::Pip(r) => r.to_string(),
-            Rank::Jack => "J".to_string(),
-            Rank::Queen => "Q".to_string(),
-            Rank::King => "K".to_string(),
-            Rank::Ace => "A".to_string(),
-        }, match self.suit {
-            Suit::Club => "♧",
-            Suit::Diamond => "♢",
-            Suit::Heart => "♡",
-            Suit::Spade => "♤",
-        })
+        write!(
+            f,
+            "{}{}",
+            match self.rank {
+                Rank::Pip(r) => r.to_string(),
+                Rank::Jack => "J".to_string(),
+                Rank::Queen => "Q".to_string(),
+                Rank::King => "K".to_string(),
+                Rank::Ace => "A".to_string(),
+            },
+            match self.suit {
+                Suit::Club => "♧",
+                Suit::Diamond => "♢",
+                Suit::Heart => "♡",
+                Suit::Spade => "♤",
+            }
+        )
     }
 }
 
@@ -115,15 +128,19 @@ impl Hand {
     /// value.
     pub fn values(&self) -> Vec<usize> {
         // Royal Flush
-        if self.is_same_suit() && self.is_consecutive() && self.cards.len() == 5 && self.cards[0].rank == Rank::Pip(10) {
+        if self.is_same_suit()
+            && self.is_consecutive()
+            && self.cards.len() == 5
+            && self.cards[0].rank == Rank::Pip(10)
+        {
             // All cards are used and all Royal flushes are equal, so no need to update the score for tie-solving
             return vec![score::ROYAL_FLUSH];
         }
-        
+
         // Straight Flush
         if self.is_same_suit() && self.is_consecutive() {
             // All cards are used so there is only one value
-            // But the score of the straight flush should be updated with the value of the highest card for tie-solving 
+            // But the score of the straight flush should be updated with the value of the highest card for tie-solving
             return vec![score::STRAIGHT_FLUSH + self.cards[self.cards.len() - 1].value()];
         }
 
@@ -162,7 +179,9 @@ impl Hand {
         if value_groups.len() >= 2 && value_groups[0].len() == 3 && value_groups[1].len() == 2 {
             // Tie-solving for the triplet & pair : value of the groups
             // The value of the triplet is more important though, hence the weighting
-            let mut values = vec![score::FULL_HOUSE + value_groups[0][0].value() * 10 + value_groups[1][0].value()];
+            let mut values = vec![
+                score::FULL_HOUSE + value_groups[0][0].value() * 10 + value_groups[1][0].value(),
+            ];
 
             // For the other groups, just the value of the group
             for i in 2..value_groups.len() {
@@ -198,7 +217,8 @@ impl Hand {
         // Two pairs
         if value_groups.len() >= 2 && value_groups[0].len() == 2 && value_groups[1].len() == 2 {
             // Tie-solving for the double pair : value of the groups
-            let mut values = vec![score::TWO_PAIRS + value_groups[0][0].value() + value_groups[1][0].value()];
+            let mut values =
+                vec![score::TWO_PAIRS + value_groups[0][0].value() + value_groups[1][0].value()];
 
             // For the other groups, just the value of the group
             for i in 2..value_groups.len() {
@@ -346,18 +366,10 @@ mod tests {
 
     #[test]
     fn test_hand_is_same_suit() {
-        let h = Hand::new(vec![
-            Card::new("2H"),
-            Card::new("4H"),
-            Card::new("JH"),
-        ]);
+        let h = Hand::new(vec![Card::new("2H"), Card::new("4H"), Card::new("JH")]);
         assert!(h.is_same_suit());
 
-        let h = Hand::new(vec![
-            Card::new("2H"),
-            Card::new("4S"),
-            Card::new("JH"),
-        ]);
+        let h = Hand::new(vec![Card::new("2H"), Card::new("4S"), Card::new("JH")]);
         assert!(!h.is_same_suit());
     }
 
@@ -377,18 +389,10 @@ mod tests {
 
     #[test]
     fn test_hand_is_consecutive() {
-        let h = Hand::new(vec![
-            Card::new("2H"),
-            Card::new("4S"),
-            Card::new("JH"),
-        ]);
+        let h = Hand::new(vec![Card::new("2H"), Card::new("4S"), Card::new("JH")]);
         assert!(!h.is_consecutive());
 
-        let h = Hand::new(vec![
-            Card::new("2H"),
-            Card::new("3S"),
-            Card::new("4H"),
-        ]);
+        let h = Hand::new(vec![Card::new("2H"), Card::new("3S"), Card::new("4H")]);
         assert!(h.is_consecutive());
 
         let h = Hand::new(vec![
@@ -408,7 +412,8 @@ mod tests {
             Card::new("QH"),
             Card::new("KH"),
             Card::new("AH"),
-        ]).values();
+        ])
+        .values();
         assert_eq!(values.len(), 1);
         assert_eq!(values[0], score::ROYAL_FLUSH);
     }
@@ -421,7 +426,8 @@ mod tests {
             Card::new("9H"),
             Card::new("TH"),
             Card::new("JH"),
-        ]).values();
+        ])
+        .values();
         assert_eq!(values.len(), 1);
         assert!(values[0] > score::STRAIGHT_FLUSH);
     }
@@ -434,7 +440,8 @@ mod tests {
             Card::new("6S"),
             Card::new("6D"),
             Card::new("6H"),
-        ]).values();
+        ])
+        .values();
         assert_eq!(values.len(), 2);
         assert!(values[0] > score::FOUR_OF_A_KIND);
         assert_eq!(values[1], 4);
@@ -448,7 +455,8 @@ mod tests {
             Card::new("2D"),
             Card::new("6D"),
             Card::new("6H"),
-        ]).values();
+        ])
+        .values();
         assert_eq!(values.len(), 1);
         assert!(values[0] > score::FULL_HOUSE);
     }
@@ -461,7 +469,8 @@ mod tests {
             Card::new("6H"),
             Card::new("8H"),
             Card::new("QH"),
-        ]).values();
+        ])
+        .values();
         assert_eq!(values.len(), 1);
         assert!(values[0] > score::FLUSH);
     }
@@ -474,7 +483,8 @@ mod tests {
             Card::new("4D"),
             Card::new("5H"),
             Card::new("6H"),
-        ]).values();
+        ])
+        .values();
         assert_eq!(values.len(), 1);
         assert!(values[0] > score::STRAIGHT);
     }
@@ -487,7 +497,8 @@ mod tests {
             Card::new("6S"),
             Card::new("6D"),
             Card::new("6H"),
-        ]).values();
+        ])
+        .values();
         assert_eq!(values.len(), 3);
         assert!(values[0] > score::THREE_OF_A_KIND);
         assert_eq!(values[1], 3);
@@ -502,7 +513,8 @@ mod tests {
             Card::new("8S"),
             Card::new("6D"),
             Card::new("6H"),
-        ]).values();
+        ])
+        .values();
         assert_eq!(values.len(), 2);
         assert!(values[0] > score::TWO_PAIRS);
         assert_eq!(values[1], 3);
@@ -516,7 +528,8 @@ mod tests {
             Card::new("8S"),
             Card::new("9D"),
             Card::new("KH"),
-        ]).values();
+        ])
+        .values();
         assert_eq!(values.len(), 4);
         assert!(values[0] > score::PAIR);
         assert_eq!(values[1], 13);
@@ -532,7 +545,8 @@ mod tests {
             Card::new("5S"),
             Card::new("9D"),
             Card::new("KH"),
-        ]).values();
+        ])
+        .values();
         assert_eq!(values.len(), 5);
         assert_eq!(values[0], 13);
         assert_eq!(values[1], 9);
