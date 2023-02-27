@@ -368,6 +368,18 @@ impl BigInt {
         }
         s
     }
+
+    /// Create a copy of the current number, with the digits reversed.
+    pub fn reverse(&self) -> Self {
+        Self {
+            digits: self.digits.clone().into_iter().rev().collect(),
+        }
+    }
+
+    /// Function to check if the current number is a palindrome.
+    pub fn is_palindrome(&self) -> bool {
+        is_palindrome(&self.digits)
+    }
 }
 
 impl ops::Add<&BigInt> for &BigInt {
@@ -452,7 +464,7 @@ impl ops::MulAssign<usize> for BigInt {
 ///
 /// assert!(!reuler::utils::is_palindrome(digits));
 /// ```
-pub fn is_palindrome<T>(x: Vec<T>) -> bool
+pub fn is_palindrome<T>(x: &Vec<T>) -> bool
 where
     T: std::cmp::PartialEq,
 {
