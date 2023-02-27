@@ -455,14 +455,14 @@ impl ops::MulAssign<usize> for BigInt {
 /// ```
 /// let digits = reuler::utils::digits_of(125521);
 ///
-/// assert!(reuler::utils::is_palindrome(digits));
+/// assert!(reuler::utils::is_palindrome(&digits));
 /// ```
 ///
 /// A number that is **not** a palindrome :
 /// ```
 /// let digits = reuler::utils::digits_of(129);
 ///
-/// assert!(!reuler::utils::is_palindrome(digits));
+/// assert!(!reuler::utils::is_palindrome(&digits));
 /// ```
 pub fn is_palindrome<T>(x: &Vec<T>) -> bool
 where
