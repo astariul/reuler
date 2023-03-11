@@ -1,4 +1,4 @@
-/// Decrypt a given list of values with a given password with XOR decryption. 
+/// Decrypt a given list of values with a given password with XOR decryption.
 fn decrypt(crypted_message: &Vec<u8>, password: &Vec<u8>) -> String {
     let mut message = String::new();
     for i in 0..crypted_message.len() {
@@ -16,7 +16,7 @@ fn decrypt(crypted_message: &Vec<u8>, password: &Vec<u8>) -> String {
 /// properly decrypted, count the number of words. Indeed, if the text is not
 /// properly decrypted, space will not be properly decrypted and we will not
 /// have several words. If the text is properly decrypted, the space characters
-/// will be properly decrypted and we will have several words. 
+/// will be properly decrypted and we will have several words.
 fn decipher(ciphered_text: &str, password_len: usize) -> usize {
     // Read the ASCII values from the ciphered text
     let mut ciphered_values = Vec::new();
@@ -33,7 +33,7 @@ fn decipher(ciphered_text: &str, password_len: usize) -> usize {
         // Decrypt the message with this password
         let message = decrypt(&ciphered_values, &password);
         let words: Vec<&str> = message.split_whitespace().collect();
-        
+
         if words.len() > best_n_words {
             best_n_words = words.len();
             best_message = message;
