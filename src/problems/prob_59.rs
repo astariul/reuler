@@ -60,3 +60,28 @@ pub fn solve() -> String {
     let ciphered_text = include_str!("data/cipher.txt");
     decipher(ciphered_text, 3).to_string()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_encrypt_decrypt_single_char() {
+        let original = String::from("This is a test");
+        let original_code = original.chars().map(|c| c as u8).collect();
+        let password = vec!['b' as u8];
+        let encrypted = decrypt(&original_code, &password);
+        let encrypted_code = encrypted.chars().map(|c| c as u8).collect();
+        assert_eq!(decrypt(&encrypted_code, &password), original);
+    }
+
+    #[test]
+    fn test_encrypt_decrypt_multiple_chars() {
+        let original = String::from("This is a test");
+        let original_code = original.chars().map(|c| c as u8).collect();
+        let password = vec!['b' as u8, 'x' as u8, 'f' as u8, 'w' as u8];
+        let encrypted = decrypt(&original_code, &password);
+        let encrypted_code = encrypted.chars().map(|c| c as u8).collect();
+        assert_eq!(decrypt(&encrypted_code, &password), original);
+    }
+}
